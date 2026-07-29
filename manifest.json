@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "HoverVoice",
+  "version": "1.0.0",
+  "description": "Acessibilidade para deficiência visual - Narrador ao passar o mouse",
+  "permissions": [
+    "storage",
+    "scripting",
+    "activeTab"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "HoverVoice - Leia o conteúdo ao passar o mouse"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "commands": {
+    "toggle-extension": {
+      "suggested_key": {
+        "default": "Alt+A",
+        "windows": "Alt+A"
+      },
+      "description": "Ativar/Desativar HoverVoice"
+    }
+  }
+}

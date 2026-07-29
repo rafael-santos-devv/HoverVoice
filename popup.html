@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HoverVoice</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                    <circle cx="20" cy="20" r="18" fill="#00A8E8"/>
+                    <path d="M20 8C13.925 8 9 12.925 9 19C9 25.075 13.925 30 20 30C26.075 30 31 25.075 31 19" stroke="white" stroke-width="2" fill="none"/>
+                    <circle cx="20" cy="19" r="3" fill="white"/>
+                </svg>
+            </div>
+            <div class="header-text">
+                <h1>HoverVoice</h1>
+                <p>Acessibilidade para deficiência visual</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Toggle Section -->
+        <div class="toggle-section">
+            <div class="toggle-content">
+                <div class="toggle-info">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8m3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5z" fill="#00A8E8"/>
+                    </svg>
+                    <div>
+                        <h3 id="statusText">HoverVoice Inativo</h3>
+                        <p id="statusSubtext">Clique para ativar</p>
+                    </div>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="extensionToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Test Voice Section -->
+        <div class="test-section">
+            <h2>TESTAR VOZ</h2>
+            <textarea 
+                id="testInput" 
+                placeholder="Digite um texto para testar..." 
+                rows="3"
+            ></textarea>
+            <button id="testButton" class="btn-primary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M8 5v14l11-7z" fill="currentColor"/>
+                </svg>
+                Ouvir
+            </button>
+        </div>
+
+        <!-- Voice Settings Section -->
+        <div class="settings-section">
+            <details>
+                <summary>
+                    <span>Configurações de Voz</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M7 10l5 5 5-5z" fill="#00A8E8"/>
+                    </svg>
+                </summary>
+                <div class="settings-content">
+                    <div class="setting-item">
+                        <label for="voiceRate">Velocidade:</label>
+                        <div class="range-container">
+                            <input type="range" id="voiceRate" min="0.5" max="2" step="0.1" value="1">
+                            <span id="rateValue">1x</span>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <label for="voicePitch">Tom:</label>
+                        <div class="range-container">
+                            <input type="range" id="voicePitch" min="0.5" max="2" step="0.1" value="1">
+                            <span id="pitchValue">1x</span>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <label for="voiceVolume">Volume:</label>
+                        <div class="range-container">
+                            <input type="range" id="voiceVolume" min="0" max="1" step="0.1" value="1">
+                            <span id="volumeValue">100%</span>
+                        </div>
+                    </div>
+                </div>
+            </details>
+        </div>
+
+        <!-- Keyboard Shortcuts -->
+        <div class="shortcuts-section">
+            <h3>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <path d="M20 5H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-9 3h2v2h-2V8zm0 3h2v2h-2v-2zM6 8h2v2H6V8zm0 3h2v2H6v-2zm3 6H7v-2h2v2zm3 0h-2v-2h2v2zm3 0h-2v-2h2v2zm3-3h-2v-2h2v2zm0-3h-2V8h2v2z" fill="#00A8E8"/>
+                </svg>
+                ATALHOS DE TECLADO
+            </h3>
+            <div class="shortcut-item">
+                <span>Ativar / Desativar</span>
+                <div class="key">Alt + A</div>
+            </div>
+            <div class="shortcut-item">
+                <span>Navegar por elementos</span>
+                <div class="key">Tab</div>
+            </div>
+        </div>
+
+        <!-- What is Narrated -->
+        <div class="narrated-section">
+            <h3>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm-5-9h10v2H7z" fill="#00A8E8"/>
+                </svg>
+                O QUE É NARRADO
+            </h3>
+            <div class="narrated-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" fill="#00A8E8"/>
+                </svg>
+                <span>Texto de parágrafos, botões e links</span>
+            </div>
+            <div class="narrated-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" fill="#FFC107"/>
+                </svg>
+                <span>Descrição alternativa de imagens</span>
+            </div>
+            <div class="narrated-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" fill="#4CAF50"/>
+                </svg>
+                <span>Rótulos de campos de formulário</span>
+            </div>
+            <div class="narrated-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M5 15h14v2H5zm0 4h14v-2H5zM5 11h14V9H5zm0-6v2h14V5z" fill="#FF9800"/>
+                </svg>
+                <span>Títulos e subtítulos da página</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>HoverVoice v1.0 · Idioma: Português (Brasil)</p>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

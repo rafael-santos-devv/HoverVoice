@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00A8E8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0088cc;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background Circle -->
+  <circle cx="64" cy="64" r="60" fill="url(#bgGradient)" stroke="#0055aa" stroke-width="2"/>
+  
+  <!-- Eye Icon -->
+  <g fill="white">
+    <!-- Left eye -->
+    <circle cx="40" cy="48" r="12" opacity="0.8"/>
+    <circle cx="40" cy="48" r="8" fill="#00A8E8"/>
+    <circle cx="40" cy="48" r="4" fill="white"/>
+    
+    <!-- Right eye -->
+    <circle cx="88" cy="48" r="12" opacity="0.8"/>
+    <circle cx="88" cy="48" r="8" fill="#00A8E8"/>
+    <circle cx="88" cy="48" r="4" fill="white"/>
+  </g>
+  
+  <!-- Sound waves -->
+  <g stroke="white" stroke-width="3" fill="none" stroke-linecap="round">
+    <!-- Arc 1 -->
+    <path d="M 64 70 Q 50 75 45 85" opacity="0.7"/>
+    <!-- Arc 2 -->
+    <path d="M 64 70 Q 78 75 83 85" opacity="0.7"/>
+    <!-- Arc 3 -->
+    <path d="M 64 70 Q 35 80 25 95" opacity="0.5"/>
+    <!-- Arc 4 -->
+    <path d="M 64 70 Q 93 80 103 95" opacity="0.5"/>
+  </g>
+  
+  <!-- Center dot for focus -->
+  <circle cx="64" cy="64" r="2" fill="white" opacity="0.3"/>
+</svg>

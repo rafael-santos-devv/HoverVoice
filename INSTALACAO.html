@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HoverVoice - Instruções de Instalação</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0a1e2e 0%, #16213e 100%);
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #00A8E8 0%, #0088cc 100%);
+            padding: 40px 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .section {
+            background: rgba(15, 35, 65, 0.8);
+            border: 1px solid rgba(0, 168, 232, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .section h2 {
+            color: #00A8E8;
+            margin-bottom: 15px;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h3 {
+            color: #7db3d8;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .steps {
+            list-style: none;
+            counter-reset: step-counter;
+        }
+
+        .steps li {
+            counter-increment: step-counter;
+            margin-bottom: 15px;
+            padding-left: 40px;
+            position: relative;
+        }
+
+        .steps li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: #00A8E8;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .code-block {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 168, 232, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            color: #00d4ff;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+
+        .highlight {
+            background: rgba(0, 168, 232, 0.15);
+            border-left: 4px solid #00A8E8;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .feature-card {
+            background: rgba(0, 168, 232, 0.1);
+            border: 1px solid rgba(0, 168, 232, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .feature-card h4 {
+            color: #00A8E8;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .feature-card p {
+            font-size: 13px;
+            color: #7db3d8;
+        }
+
+        .button {
+            background: linear-gradient(135deg, #00A8E8 0%, #0088cc 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 168, 232, 0.4);
+        }
+
+        .warning {
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            border-left: 4px solid #FFC107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            color: #ffeb3b;
+        }
+
+        .success {
+            background: rgba(76, 175, 80, 0.1);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            border-left: 4px solid #4CAF50;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            color: #81c784;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #5a7a8f;
+            border-top: 1px solid rgba(0, 168, 232, 0.2);
+            margin-top: 40px;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🎙️ HoverVoice</h1>
+            <p>Acessibilidade para Deficiência Visual</p>
+        </div>
+
+        <!-- Installation Guide -->
+        <div class="section">
+            <h2>
+                <span>📦</span>
+                Guia de Instalação
+            </h2>
+            <p>Siga os passos abaixo para instalar a extensão HoverVoice no seu navegador:</p>
+            
+            <h3>Para Google Chrome:</h3>
+            <ol class="steps">
+                <li>Abra o Chrome e digite na barra de endereço: <strong>chrome://extensions/</strong></li>
+                <li>Ative o <strong>"Modo de desenvolvedor"</strong> no canto superior direito</li>
+                <li>Clique no botão <strong>"Carregar extensão sem empacotamento"</strong></li>
+                <li>Navegue até a pasta do HoverVoice e selecione-a</li>
+                <li>Pronto! A extensão será carregada e o ícone aparecerá na barra de ferramentas</li>
+            </ol>
+
+            <h3>Para Microsoft Edge:</h3>
+            <ol class="steps">
+                <li>Abra o Edge e digite na barra de endereço: <strong>edge://extensions/</strong></li>
+                <li>Ative o <strong>"Modo de desenvolvedor"</strong> no canto inferior esquerdo</li>
+                <li>Clique em <strong>"Carregar extensão descompactada"</strong></li>
+                <li>Selecione a pasta do HoverVoice</li>
+                <li>A extensão estará pronta para usar!</li>
+            </ol>
+
+            <div class="success">
+                ✅ <strong>Instalação concluída!</strong> Agora você pode usar o HoverVoice em qualquer site.
+            </div>
+        </div>
+
+        <!-- Features -->
+        <div class="section">
+            <h2>
+                <span>✨</span>
+                Recursos Principais
+            </h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>🖱️ Narração ao Hover</h4>
+                    <p>Passe o mouse sobre qualquer elemento para ouvir seu conteúdo narrado automaticamente.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>⌨️ Atalhos de Teclado</h4>
+                    <p>Alt+A para ativar/desativar. Tab para navegar entre elementos.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🎚️ Configurações Avançadas</h4>
+                    <p>Ajuste velocidade, tom e volume da voz conforme sua preferência.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📝 Testar Voz</h4>
+                    <p>Digite um texto qualquer e clique em "Ouvir" para testar a narração.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🌐 Funciona em Todo Site</h4>
+                    <p>Compatível com todos os sites e plataformas web.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>💾 Memória de Configurações</h4>
+                    <p>Suas preferências são salvas automaticamente.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- How to Use -->
+        <div class="section">
+            <h2>
+                <span>🎯</span>
+                Como Usar
+            </h2>
+
+            <h3>1. Ativar a Extensão</h3>
+            <ol class="steps">
+                <li>Clique no ícone da extensão (olho azul) na barra de ferramentas</li>
+                <li>Ative o switch <strong>"HoverVoice"</strong></li>
+                <li>Você verá a mensagem: <em>"HoverVoice Ativo - Passe o mouse para ouvir"</em></li>
+            </ol>
+
+            <h3>2. Usar na Página</h3>
+            <ol class="steps">
+                <li>Simplesmente <strong>passe o mouse</strong> sobre qualquer texto, botão, link ou imagem</li>
+                <li>A extensão lerá o conteúdo automaticamente</li>
+                <li>Use <strong>Tab</strong> para navegar pelos elementos</li>
+            </ol>
+
+            <h3>3. Configurar a Voz</h3>
+            <ol class="steps">
+                <li>Abra o popup da extensão</li>
+                <li>Clique em <strong>"Configurações de Voz"</strong></li>
+                <li>Ajuste os controles de velocidade, tom e volume</li>
+                <li>As mudanças são salvas automaticamente</li>
+            </ol>
+
+            <h3>4. Testar</h3>
+            <ol class="steps">
+                <li>No popup, digite um texto no campo <strong>"TESTAR VOZ"</strong></li>
+                <li>Clique no botão <strong>"Ouvir"</strong></li>
+                <li>Teste suas configurações antes de usar no site</li>
+            </ol>
+        </div>
+
+        <!-- Keyboard Shortcuts -->
+        <div class="section">
+            <h2>
+                <span>⌨️</span>
+                Atalhos de Teclado
+            </h2>
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr style="background: rgba(0, 168, 232, 0.1);">
+                    <th style="padding: 12px; text-align: left; color: #00A8E8; border-bottom: 1px solid rgba(0, 168, 232, 0.3);">Atalho</th>
+                    <th style="padding: 12px; text-align: left; color: #00A8E8; border-bottom: 1px solid rgba(0, 168, 232, 0.3);">Ação</th>
+                </tr>
+                <tr style="border-bottom: 1px solid rgba(0, 168, 232, 0.2);">
+                    <td style="padding: 12px;"><code class="code-block" style="padding: 4px 8px;">Alt + A</code></td>
+                    <td style="padding: 12px;">Ativa ou desativa a extensão</td>
+                </tr>
+                <tr style="border-bottom: 1px solid rgba(0, 168, 232, 0.2);">
+                    <td style="padding: 12px;"><code class="code-block" style="padding: 4px 8px;">Tab</code></td>
+                    <td style="padding: 12px;">Navega para o próximo elemento</td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px;"><code class="code-block" style="padding: 4px 8px;">Shift + Tab</code></td>
+                    <td style="padding: 12px;">Navega para o elemento anterior</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Supported Elements -->
+        <div class="section">
+            <h2>
+                <span>📋</span>
+                Elementos Narrados
+            </h2>
+            <p>O HoverVoice narração os seguintes tipos de conteúdo:</p>
+            <ul style="list-style: none; padding-left: 20px;">
+                <li style="margin-bottom: 8px;">✓ Texto de parágrafos</li>
+                <li style="margin-bottom: 8px;">✓ Títulos e subtítulos</li>
+                <li style="margin-bottom: 8px;">✓ Botões e links</li>
+                <li style="margin-bottom: 8px;">✓ Descrição alternativa de imagens (atributo alt)</li>
+                <li style="margin-bottom: 8px;">✓ Rótulos de formulários (label)</li>
+                <li style="margin-bottom: 8px;">✓ Valores de inputs</li>
+                <li style="margin-bottom: 8px;">✓ Itens de lista</li>
+                <li style="margin-bottom: 8px;">✓ Células de tabela</li>
+            </ul>
+        </div>
+
+        <!-- Troubleshooting -->
+        <div class="section">
+            <h2>
+                <span>🔧</span>
+                Solução de Problemas
+            </h2>
+
+            <h3>A extensão não funciona</h3>
+            <div class="highlight">
+                <strong>Solução:</strong> Verifique se a extensão está ativada em <strong>chrome://extensions/</strong>. Se estiver desativada, clique para ativar.
+            </div>
+
+            <h3>Não consigo ouvir o áudio</h3>
+            <div class="highlight">
+                <strong>Solução:</strong> 
+                <ul style="margin-left: 20px;">
+                    <li>Verifique o volume do navegador</li>
+                    <li>Verifique o volume do sistema</li>
+                    <li>Teste usando o botão "Ouvir" no popup</li>
+                    <li>Verifique se há fones de ouvido ou caixas conectadas</li>
+                </ul>
+            </div>
+
+            <h3>Os elementos não são narrados</h3>
+            <div class="highlight">
+                <strong>Solução:</strong>
+                <ul style="margin-left: 20px;">
+                    <li>Certifique-se de que a extensão está ativada</li>
+                    <li>Recarregue a página (Ctrl + R ou Cmd + R)</li>
+                    <li>Passe o mouse sobre elementos com texto</li>
+                </ul>
+            </div>
+
+            <h3>A voz está muito rápida ou muito lenta</h3>
+            <div class="highlight">
+                <strong>Solução:</strong> Abra o popup da extensão e ajuste o controle de <strong>"Velocidade"</strong> na seção de configurações.
+            </div>
+
+            <div class="warning">
+                ⚠️ <strong>Nota:</strong> Alguns navegadores podem ter suporte limitado a idiomas ou síntese de voz. Certifique-se de que seu navegador suporta o Português Brasileiro.
+            </div>
+        </div>
+
+        <!-- System Requirements -->
+        <div class="section">
+            <h2>
+                <span>💻</span>
+                Requisitos do Sistema
+            </h2>
+            <ul style="list-style: none; padding-left: 20px;">
+                <li style="margin-bottom: 8px;">✓ Google Chrome v90+ ou Microsoft Edge v90+</li>
+                <li style="margin-bottom: 8px;">✓ JavaScript habilitado</li>
+                <li style="margin-bottom: 8px;">✓ Acesso a áudio/fones de ouvido</li>
+                <li style="margin-bottom: 8px;">✓ Suporte a Web Speech API (nativa)</li>
+            </ul>
+        </div>
+
+        <!-- Tips -->
+        <div class="section">
+            <h2>
+                <span>💡</span>
+                Dicas Úteis
+            </h2>
+            <div class="highlight">
+                🎯 <strong>Dica 1:</strong> Use <strong>Alt + A</strong> para ativar/desativar rapidamente sem abrir o popup.
+            </div>
+            <div class="highlight">
+                🎯 <strong>Dica 2:</strong> Configure a velocidade em 1.5x ou 2x para melhor compreensão.
+            </div>
+            <div class="highlight">
+                🎯 <strong>Dica 3:</strong> Use <strong>Tab</strong> para navegar pelos elementos da página de forma sequencial.
+            </div>
+            <div class="highlight">
+                🎯 <strong>Dica 4:</strong> O botão "Ouvir" é perfeito para testar suas configurações de voz antes de usar no site.
+            </div>
+            <div class="highlight">
+                🎯 <strong>Dica 5:</strong> Certifique-se de que os atributos <strong>alt</strong> estão preenchidos nas imagens para uma melhor experiência.
+            </div>
+        </div>
+
+        <!-- Support -->
+        <div class="section" style="text-align: center; background: rgba(0, 168, 232, 0.1); border-color: rgba(0, 168, 232, 0.5);">
+            <h2 style="justify-content: center;">
+                <span>❓</span>
+                Precisa de Ajuda?
+            </h2>
+            <p style="margin-bottom: 20px;">Se encontrou algum problema não listado acima ou deseja sugerir uma nova funcionalidade:</p>
+            <button class="button">Reportar um Problema</button>
+            <button class="button" style="margin-left: 10px;">Sugerir Melhoria</button>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>HoverVoice</strong> v1.0.0</p>
+            <p>Projeto Educacional - Senai</p>
+            <p>Idioma: Português (Brasil)</p>
+            <p style="margin-top: 10px; font-size: 12px;">© 2026 - Todos os direitos reservados</p>
+        </div>
+    </div>
+</body>
+</html>

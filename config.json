@@ -1,0 +1,148 @@
+{
+  "project": {
+    "name": "HoverVoice",
+    "version": "1.0.0",
+    "description": "Extensão de acessibilidade para deficiência visual com narração ao passar o mouse",
+    "author": "Projeto Senai",
+    "license": "Educacional"
+  },
+  "features": {
+    "text-to-speech": {
+      "enabled": true,
+      "engine": "Web Speech API",
+      "language": "pt-BR",
+      "supported-languages": ["pt-BR", "en-US", "es-ES"]
+    },
+    "hover-narration": {
+      "enabled": true,
+      "pause-on-new-hover": false,
+      "supported-elements": [
+        "p", "span", "a", "button",
+        "h1", "h2", "h3", "h4", "h5", "h6",
+        "li", "td", "th", "label",
+        "img", "svg"
+      ]
+    },
+    "keyboard-shortcuts": {
+      "toggle-extension": {
+        "key": "Alt+A",
+        "description": "Ativar/Desativar HoverVoice"
+      },
+      "navigate-elements": {
+        "key": "Tab",
+        "description": "Navegar para próximo elemento"
+      },
+      "navigate-previous": {
+        "key": "Shift+Tab",
+        "description": "Navegar para elemento anterior"
+      }
+    },
+    "voice-settings": {
+      "rate": {
+        "min": 0.5,
+        "max": 2,
+        "default": 1,
+        "step": 0.1,
+        "unit": "x (multiplicador)"
+      },
+      "pitch": {
+        "min": 0.5,
+        "max": 2,
+        "default": 1,
+        "step": 0.1,
+        "unit": "x (multiplicador)"
+      },
+      "volume": {
+        "min": 0,
+        "max": 1,
+        "default": 1,
+        "step": 0.1,
+        "unit": "0-1 (0-100%)"
+      }
+    }
+  },
+  "file-structure": {
+    "manifest.json": "Configuração e permissões da extensão",
+    "popup.html": "Interface do usuário (popup)",
+    "popup.css": "Estilos da interface",
+    "popup.js": "Lógica da interface e controle",
+    "content.js": "Script que roda nas páginas web",
+    "images/icon128.svg": "Ícone da extensão",
+    "README.md": "Documentação geral",
+    "INSTALACAO.html": "Guia de instalação e uso",
+    "TESTE.html": "Página de teste interativa",
+    "config.json": "Este arquivo"
+  },
+  "supported-browsers": [
+    {
+      "name": "Google Chrome",
+      "minimum-version": 90,
+      "status": "Suportado"
+    },
+    {
+      "name": "Microsoft Edge",
+      "minimum-version": 90,
+      "status": "Suportado"
+    },
+    {
+      "name": "Firefox",
+      "minimum-version": 88,
+      "status": "Não testado"
+    },
+    {
+      "name": "Safari",
+      "minimum-version": 14,
+      "status": "Não testado"
+    }
+  ],
+  "installation-steps": [
+    "1. Abra chrome://extensions/ ou edge://extensions/",
+    "2. Ative o 'Modo de desenvolvedor'",
+    "3. Clique em 'Carregar extensão sem empacotamento'",
+    "4. Selecione a pasta HoverVoice",
+    "5. Pronto! A extensão está instalada"
+  ],
+  "quick-start": [
+    "1. Clique no ícone da extensão",
+    "2. Ative o toggle 'HoverVoice'",
+    "3. Passe o mouse sobre elementos para ouvir",
+    "4. Use Alt+A para ativar/desativar rapidamente"
+  ],
+  "troubleshooting": {
+    "extension-not-working": "Verifique se está ativada em chrome://extensions/",
+    "no-audio": "Verifique o volume do navegador e do sistema",
+    "elements-not-narrated": "Recarregue a página e certifique-se que a extensão está ativada",
+    "voice-too-fast-slow": "Ajuste a velocidade nas configurações de voz"
+  },
+  "permissions": {
+    "storage": "Salvar configurações do usuário",
+    "scripting": "Executar scripts nas páginas",
+    "activeTab": "Acessar aba ativa"
+  },
+  "future-enhancements": [
+    "Suporte a mais idiomas",
+    "Seleção de vozes diferentes",
+    "Histórico de elementos narrados",
+    "Modo de acessibilidade avançado",
+    "Temas customizáveis",
+    "Integração com leitores de tela"
+  ],
+  "development": {
+    "language": "JavaScript",
+    "framework": "Vanilla JS (sem dependências)",
+    "apis-used": [
+      "Web Speech API",
+      "Chrome Storage API",
+      "Chrome Runtime API",
+      "DOM API",
+      "Mutation Observer API"
+    ],
+    "testing": "Página TESTE.html fornecida"
+  },
+  "accessibility": {
+    "wcag-compliance": "Parcial (objetivo WCAG 2.1 AA)",
+    "aria-support": "Suportado",
+    "keyboard-navigation": "Suportado",
+    "text-to-speech": "Suportado"
+  }
+}
