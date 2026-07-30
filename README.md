@@ -146,6 +146,13 @@ Contribuições são bem-vindas! Sinta-se à vontade para:
 - Sugerir novos recursos
 - Enviar melhorias de código
 
+## Integrantes
+
+- Anna Luísa da Paixão Miranda
+- Carlos Henrique Romeu Pinto
+- João Pedro Silva Nonato
+- Pedro Henrique Carvalho 
+
 ## Contato 📧
 
 Para dúvidas ou sugestões sobre o HoverVoice, abra uma issue no repositório.
