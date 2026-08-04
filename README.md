@@ -1,164 +1,214 @@
-# HoverVoice - Extensão de Acessibilidade 🎙️
+# HoverVoice — Extensão de Acessibilidade 🎙️
 
-Uma extensão de navegador que fornece narração em áudio quando você passa o mouse sobre elementos da página, tornando a internet mais acessível para pessoas com deficiência visual.
+Extensão de navegador que narra o conteúdo de páginas web conforme o usuário as percorre com o cursor ou com o teclado, ampliando a autonomia de navegação de pessoas com deficiência visual ou baixa visão.
 
-## Recursos ✨
-
-- **Narração ao Passar o Mouse**: Ouça o conteúdo de qualquer elemento ao passar o mouse
-- **Atalhos de Teclado**: 
-  - `Alt + A` para ativar/desativar
-  - `Tab` para navegar por elementos
-- **Configurações de Voz Personalizáveis**:
-  - Velocidade de fala (0.5x a 2x)
-  - Tom da voz (0.5x a 2x)
-  - Volume (0% a 100%)
-- **Suporte a Múltiplos Elementos**:
-  - Texto de parágrafos, botões e links
-  - Descrições alternativas de imagens
-  - Rótulos de campos de formulário
-  - Títulos e subtítulos da página
-
-## Instalação 📦
-
-### Para Chrome/Edge (Modo Desenvolvimento)
-
-1. Clone ou extraia os arquivos da extensão
-2. Abra `chrome://extensions/` (Chrome) ou `edge://extensions/` (Edge)
-3. Ative o **"Modo de desenvolvedor"** no canto superior direito
-4. Clique em **"Carregar extensão sem empacotamento"**
-5. Selecione a pasta da extensão
-
-## Como Usar 🎯
-
-### Ativar a Extensão
-
-1. Clique no ícone da extensão na barra de ferramentas
-2. Alterne o switch **"HoverVoice"** para ativar
-3. A extensão começará a narrar quando você passar o mouse sobre elementos
-
-### Configurar a Voz
-
-1. Abra o popup da extensão
-2. Clique em **"Configurações de Voz"**
-3. Ajuste:
-   - **Velocidade**: Quanto mais rápido você quer a narração
-   - **Tom**: Altere o pitch da voz
-   - **Volume**: Controle o volume de saída
-
-### Testar a Narração
-
-1. Digite um texto no campo **"TESTAR VOZ"**
-2. Clique no botão **"Ouvir"**
-3. A extensão reproduzirá o áudio do seu texto
-
-## Estrutura do Projeto 📁
-
-```
-HoverVoice/
-├── manifest.json      # Configuração da extensão
-├── popup.html         # Interface do popup
-├── popup.css          # Estilos do popup
-├── popup.js           # Lógica do popup
-├── content.js         # Script de conteúdo (executa nas páginas)
-├── images/            # Ícones da extensão
-└── README.md          # Este arquivo
-```
-
-## Arquivos Principais 📄
-
-### manifest.json
-Define as permissões e metadados da extensão.
-
-### popup.html / popup.css / popup.js
-Interface do usuário para controlar a extensão e testar a voz.
-
-### content.js
-Script que executa nas páginas web:
-- Detecta elementos interativos
-- Adiciona event listeners para hover e focus
-- Gerencia a síntese de voz
-- Suporta carregamento dinâmico de elementos
-
-## Tecnologias Utilizadas 🛠️
-
-- **Web Speech API**: Para síntese de voz
-- **Chrome Storage API**: Para persistência de configurações
-- **Mutation Observer**: Para detectar elementos adicionados dinamicamente
-- **CSS3**: Para animações e estilos
-
-## Navegadores Suportados 🌐
-
-- ✅ Google Chrome (recomendado)
-- ✅ Microsoft Edge
-- ✅ Chromium-based browsers
-
-## Idiomas 🌍
-
-- Português (Brasil) - Padrão
-- Extensível para outros idiomas
-
-## Limitações ⚠️
-
-- Requer que JavaScript esteja habilitado
-- A síntese de voz depende da API nativa do navegador
-- Alguns navegadores podem ter limitações de idiomas disponíveis
-
-## Troubleshooting 🔧
-
-### A extensão não está funcionando
-1. Verifique se está habilitada em `chrome://extensions/`
-2. Recarregue a página web (Ctrl + R)
-3. Verifique se JavaScript está habilitado
-
-### A voz não é ouvida
-1. Verifique o volume do navegador
-2. Verifique as configurações de áudio do sistema
-3. Tente testar com o campo de teste de voz
-
-### Elementos não estão sendo narrados
-1. Ative a extensão no popup
-2. Certifique-se de que está passando o mouse sobre elementos válidos
-3. Verifique se o elemento tem conteúdo de texto
-
-## Desenvolvimento 👨‍💻
-
-### Adicionar novo idioma
-
-Em `popup.js` e `content.js`, procure por:
-```javascript
-language: 'pt-BR'
-```
-
-Altere ou estenda com outros códigos de idioma (ex: 'en-US', 'es-ES').
-
-### Modificar seletores CSS
-
-Em `content.js`, procure por `selectorsToListen` para adicionar ou remover elementos a serem narrados.
-
-## Licença 📜
-
-Projeto Senai - Educacional
-
-## Contribuições 🤝
-
-Contribuições são bem-vindas! Sinta-se à vontade para:
-- Reportar bugs
-- Sugerir novos recursos
-- Enviar melhorias de código
-
-## Integrantes
-
-- Anna Luísa da Paixão Miranda
-- Carlos Henrique Romeu Pinto
-- João Pedro Silva Nonato
-- Pedro Henrique Carvalho 
-
-## Contato 📧
-
-Para dúvidas ou sugestões sobre o HoverVoice, abra uma issue no repositório.
+**Versão:** 1.1.0 · **Idioma:** Português (Brasil) · **Licença:** Educacional
 
 ---
 
-**Versão**: 1.0.0  
-**Última atualização**: 2026  
-**Idioma**: Português (Brasil)
+## Sobre o projeto
+
+Projeto integrador desenvolvido no **Programa Full Stack**, iniciativa da Petrobras, no **SENAI Dendezeiros** — Salvador/BA.
+
+**Docente orientador:** Matheus de Azevedo Porciúncula Santos
+
+### Equipe
+
+| Integrante | Papel |
+|---|---|
+| Carlos Henrique Madureira Santos | Scrum Master e Gerente de Projeto |
+| Anna Luísa Paixão Miranda | Product Owner — frente de negócios |
+| João Pedro Silva Nonato | Desenvolvedor — idealizador e arquitetura |
+| Rafael Francisco Silva Santos | Desenvolvedor — interface |
+| Pedro Henrique F. de Carvalho | Desenvolvedor — design e negócios |
+
+A gestão do projeto segue o framework **Scrum**, em três sprints de duas semanas.
+
+---
+
+## Recursos
+
+- **Narração ao passar o mouse** — o conteúdo do elemento apontado é lido em voz alta
+- **Narração por teclado** — elementos que recebem foco via `Tab` também são narrados
+- **Atalhos** — `Alt + A` ativa e desativa; `Tab` e `Shift + Tab` navegam
+- **Configurações de voz** — velocidade e tom (0.5x a 2x) e volume (0% a 100%)
+- **Preferências persistentes** — mantidas entre sessões e sincronizadas entre abas
+- **Realce visual** — o elemento em narração recebe contorno, sem alterar o layout da página
+- **Operação local** — nenhum dado sai do dispositivo
+
+### O que é narrado
+
+Parágrafos, títulos (`h1`–`h6`), botões, links, itens de lista, células de tabela, rótulos de formulário, campos de entrada, texto alternativo de imagens, títulos de SVG e elementos com atributos ARIA.
+
+---
+
+## Instalação
+
+> ⚠️ **Antes de instalar:** o Chrome **não aceita ícones em SVG**. Converta o ícone para PNG e coloque em `images/` os arquivos `icon16.png`, `icon48.png` e `icon128.png`. Sem eles a extensão não carrega.
+
+1. Baixe ou clone este repositório
+2. Abra `chrome://extensions/` (Chrome) ou `edge://extensions/` (Edge)
+3. Ative o **Modo de desenvolvedor**, no canto superior direito
+4. Clique em **Carregar sem compactação**
+5. Selecione a pasta do projeto
+
+---
+
+## Como usar
+
+1. Clique no ícone da extensão na barra de ferramentas
+2. Ative o seletor **HoverVoice** — ou pressione `Alt + A`
+3. Passe o mouse sobre qualquer elemento da página
+
+Ao ativar pela primeira vez, a extensão anuncia em voz "HoverVoice ativado" — retorno pensado para quem usa o atalho sem enxergar a interface.
+
+Para testar a voz sem sair do popup, digite um texto no campo **TESTAR VOZ** e clique em **Ouvir**.
+
+---
+
+## Estrutura do projeto
+
+```
+HoverVoice/
+├── manifest.json      # Configuração, permissões e atalhos (Manifest V3)
+├── background.js      # Service worker — trata o atalho de teclado
+├── content.js         # Executa nas páginas web — captura e narração
+├── popup.html         # Interface do usuário
+├── popup.css          # Estilos da interface
+├── popup.js           # Lógica da interface
+├── images/            # Ícones da extensão (PNG)
+├── TESTE.html         # Página de teste com todos os tipos de elemento
+└── README.md          # Este arquivo
+```
+
+---
+
+## Arquitetura
+
+```
+┌─────────────┐  grava   ┌──────────────────┐   lê    ┌──────────────┐
+│ popup.js    │─────────▶│  chrome.storage  │◀────────│  content.js  │
+└─────────────┘          │      .local      │         └──────┬───────┘
+                         └──────────────────┘                │
+┌─────────────┐  grava            ▲                          ▼
+│background.js│───────────────────┘                  ┌───────────────┐
+│  (Alt + A)  │                                      │ Web Speech API│
+└─────────────┘                                      └───────────────┘
+```
+
+O **armazenamento local é a única fonte de verdade**. Popup e content script observam `chrome.storage.onChanged`, de modo que qualquer alteração se propaga sozinha para todas as abas abertas — sem envio manual de mensagens.
+
+### Delegação de eventos
+
+O `content.js` registra **dois listeners no `document`** (`pointerover` e `focusin`), não um listener por elemento. O alvo é resolvido com `Element.closest()`. Isso traz três consequências:
+
+- **Desempenho** — nada é percorrido ou registrado a cada mutação do DOM
+- **Elementos aninhados** — `closest()` retorna o elemento mais específico, então um `<span>` dentro de um `<p>` narra uma vez só
+- **Conteúdo dinâmico** — elementos inseridos após o carregamento funcionam automaticamente, sem `MutationObserver`
+
+### Ordem de extração do texto
+
+1. `aria-label`
+2. `aria-labelledby`
+3. Imagens: `alt` → `title` → descrição genérica
+4. SVG: elemento `<title>`
+5. Campos de formulário: `<label for>` → `<label>` envolvente → `placeholder` → `title` → `value`
+6. `title`
+7. `textContent`
+
+O texto é normalizado (espaços colapsados) e limitado a 500 caracteres.
+
+---
+
+## Tecnologias
+
+| Tecnologia | Uso |
+|---|---|
+| JavaScript (Vanilla) | Toda a lógica — sem dependências externas |
+| Web Speech API | Síntese de voz |
+| Chrome Storage API | Persistência e sincronização de preferências |
+| Chrome Commands API | Atalho de teclado |
+| Manifest V3 | Padrão de extensão |
+
+---
+
+## Navegadores suportados
+
+| Navegador | Versão mínima | Situação |
+|---|---|---|
+| Google Chrome | 90 | Suportado |
+| Microsoft Edge | 90 | Suportado |
+| Outros baseados em Chromium | 90 | Deve funcionar |
+| Firefox | — | Não suportado nesta versão |
+| Safari | — | Não suportado nesta versão |
+
+---
+
+## Limitações conhecidas
+
+- Requer JavaScript habilitado
+- A qualidade e a disponibilidade das vozes dependem do sistema operacional
+- Não narra conteúdo dentro de `<iframe>` (`all_frames` está desativado por desempenho)
+- Não lê documentos PDF nem conteúdo desenhado em `<canvas>`
+- Não substitui um leitor de tela completo — posiciona-se como complemento de baixo atrito
+
+---
+
+## Solução de problemas
+
+**A extensão não carrega**
+Verifique se os ícones PNG existem em `images/`. Ícones SVG causam erro no carregamento.
+
+**O atalho `Alt + A` não funciona**
+Confira em `chrome://extensions/shortcuts` se o atalho foi atribuído. Outra extensão pode estar usando a mesma combinação.
+
+**Nenhum áudio é reproduzido**
+Verifique o volume do sistema e do navegador. Teste com o botão **Ouvir** no popup. Confirme que há voz em português instalada no sistema.
+
+**Elementos não são narrados**
+Confirme que a extensão está ativa e que o elemento possui conteúdo textual, rótulo ou descrição alternativa.
+
+---
+
+## Desenvolvimento
+
+### Alterar o idioma
+
+O idioma padrão está definido como `pt-BR` na constante `DEFAULT_STATE`, presente em `background.js`, `content.js` e `popup.js`. Altere nos três arquivos ou exponha a opção na interface.
+
+### Alterar os elementos narrados
+
+Em `content.js`, edite a constante `NARRATABLE_SELECTOR`.
+
+### Ajustar a latência
+
+Em `content.js`, a constante `HOVER_DELAY_MS` (padrão: 120 ms) define o tempo de estabilização antes de iniciar a locução. Valores menores tornam a resposta mais imediata, porém disparam fala para elementos apenas atravessados pelo cursor.
+
+### Convenções de código
+
+- Indentação de 4 espaços
+- `const` por padrão; `let` apenas quando houver reatribuição
+- Nomes de funções e variáveis em `camelCase`, em inglês
+- Comentários em português, explicando a intenção
+- Classes CSS injetadas usam o prefixo `hovervoice-`
+
+---
+
+## Documentação do projeto
+
+| Documento | Conteúdo |
+|---|---|
+| DOC-01 | Controle de Projeto — sprints, riscos, cronograma |
+| DOC-02 | Qualidade — casos de teste e critérios de aceitação |
+| DOC-03 | Negócios — viabilidade e impacto social |
+| DOC-04 | Requisitos — Product Backlog e especificação |
+
+---
+
+## Licença
+
+Projeto SENAI — uso educacional.
+
+---
+
+**Tornando a internet mais acessível para todos.** 🎙️
