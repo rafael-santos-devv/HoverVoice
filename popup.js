@@ -21,7 +21,8 @@
         voiceRate: 1,
         voicePitch: 1,
         voiceVolume: 1,
-        language: 'pt-BR'
+        language: 'pt-BR',
+        pdfAutoOpen: true
     });
 
     const RATE_RANGE = { min: 0.5, max: 2 };
@@ -36,6 +37,7 @@
 
     const ui = {
         toggle: document.getElementById('extensionToggle'),
+        pdfAuto: document.getElementById('pdfAutoToggle'),
         statusText: document.getElementById('statusText'),
         statusSubtext: document.getElementById('statusSubtext'),
         testInput: document.getElementById('testInput'),
@@ -127,6 +129,10 @@
         }
     }
 
+    function renderPdfSettings() {
+        ui.pdfAuto.checked = Boolean(state.pdfAutoOpen);
+    }
+
     function renderVoiceSettings() {
         ui.rate.value = state.voiceRate;
         ui.pitch.value = state.voicePitch;
@@ -139,6 +145,7 @@
 
     function render() {
         renderStatus();
+        renderPdfSettings();
         renderVoiceSettings();
     }
 
@@ -181,6 +188,11 @@
         await saveState();
     }
 
+    async function handlePdfAutoChange() {
+        state = { ...state, pdfAutoOpen: ui.pdfAuto.checked };
+        await saveState();
+    }
+
     async function handleVoiceSettingsChange() {
         state = {
             ...state,
@@ -219,6 +231,7 @@
 
     function attachListeners() {
         ui.toggle.addEventListener('change', handleToggle);
+        ui.pdfAuto.addEventListener('change', handlePdfAutoChange);
         ui.testButton.addEventListener('click', handleTestVoice);
 
         [ui.rate, ui.pitch, ui.volume].forEach((control) => {

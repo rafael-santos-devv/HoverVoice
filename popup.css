@@ -177,6 +177,10 @@ input:focus-visible,
     margin-bottom: 2px;
 }
 
+.pdf-section .toggle-info h2 {
+    font-size: 14px;
+}
+
 .toggle-info p {
     font-size: 12px;
     color: var(--cor-texto-suave);

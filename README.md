@@ -2,7 +2,7 @@
 
 Extensão de navegador que narra o conteúdo de páginas web conforme o usuário as percorre com o cursor ou com o teclado, ampliando a autonomia de navegação de pessoas com deficiência visual ou baixa visão.
 
-**Versão:** 1.1.0 · **Idioma:** Português (Brasil) · **Licença:** Educacional
+**Versão:** 1.2.0 · **Idioma:** Português (Brasil) · **Licença:** Educacional
 
 ---
 
@@ -30,10 +30,11 @@ A gestão do projeto segue o framework **Scrum**, em três sprints de duas seman
 
 - **Narração ao passar o mouse** — o conteúdo do elemento apontado é lido em voz alta
 - **Narração por teclado** — elementos que recebem foco via `Tab` também são narrados
-- **Atalhos** — `Alt + A` ativa e desativa; `Tab` e `Shift + Tab` navegam
+- **Atalhos** — `Alt + A` ativa e desativa; `Alt + P` abre o PDF atual no leitor; `Tab` e `Shift + Tab` navegam
 - **Configurações de voz** — velocidade e tom (0.5x a 2x) e volume (0% a 100%)
 - **Preferências persistentes** — mantidas entre sessões e sincronizadas entre abas
 - **Realce visual** — o elemento em narração recebe contorno, sem alterar o layout da página
+- **Leitor de PDF** — PDFs abertos no navegador são carregados automaticamente em um leitor próprio, onde cada parágrafo é narrado ao passar o mouse ou ao receber o foco com `Tab`
 - **Operação local** — nenhum dado sai do dispositivo
 
 ### O que é narrado
@@ -66,13 +67,43 @@ Para testar a voz sem sair do popup, digite um texto no campo **TESTAR VOZ** e c
 
 ---
 
+## Leitura de PDFs
+
+O visualizador de PDF nativo do Chrome é isolado: extensões não alcançam o texto exibido nele. Por isso o HoverVoice abre o PDF em um **leitor próprio** (`viewer.html`), desenhado com o [PDF.js](https://mozilla.github.io/pdf.js/) (Mozilla, licença Apache 2.0, incluído em `lib/`).
+
+**Como abrir um PDF**
+
+- **Automático** — com a extensão ativa e a chave "Abrir PDFs no leitor" ligada no popup, qualquer PDF aberto no navegador é redirecionado ao leitor. PDFs de download (`Content-Disposition: attachment`) não são afetados.
+- **Atalho `Alt + P`** — abre no leitor o PDF da aba atual (ou um leitor vazio).
+- **Arquivo do computador** — botão **Abrir arquivo** ou arrastar o PDF para a janela do leitor.
+
+**No leitor**
+
+- Passe o mouse sobre um parágrafo, ou use `Tab` / `Shift + Tab`, para ouvi-lo. Os parágrafos são agrupados a partir das linhas do PDF e respeitam colunas.
+- `Esc` interrompe a fala. Os botões permitem alterar o tamanho, baixar uma cópia do PDF e ligar ou desligar a narração.
+- PDFs com senha pedem a senha. Se o PDF não puder ser carregado (por exemplo, exige login), há um botão para abri-lo no visualizador do navegador.
+
+**Limitações conhecidas**
+
+- **PDFs escaneados** (só imagem) não têm texto a narrar; o leitor avisa. Seria necessário OCR.
+- **Arquivos locais por endereço** (`file://`) só são redirecionados se for ativado "Permitir acesso a URLs de arquivo" nos detalhes da extensão em `chrome://extensions`. Sem isso, use **Abrir arquivo**.
+- Em parágrafos muito longos (mais de ~480 caracteres), a narração é dividida em trechos, cortando no fim de uma linha.
+- Texto girado (como marcas d'água) não é narrado.
+
+---
+
 ## Estrutura do projeto
 
 ```
 HoverVoice/
 ├── manifest.json      # Configuração, permissões e atalhos (Manifest V3)
-├── background.js      # Service worker — trata o atalho de teclado
+├── background.js      # Service worker — atalhos e redirecionamento de PDFs
 ├── content.js         # Executa nas páginas web — captura e narração
+├── viewer.html        # Leitor de PDF (página da extensão)
+├── viewer.js          # Leitor de PDF — carregamento, desenho das páginas e blocos
+├── viewer.css         # Estilos do leitor
+├── pdf-blocks.js      # Agrupa o texto do PDF em parágrafos narráveis
+├── lib/               # PDF.js (pdf.min.mjs, worker, fontes e mapas de caracteres)
 ├── popup.html         # Interface do usuário
 ├── popup.css          # Estilos da interface
 ├── popup.js           # Lógica da interface

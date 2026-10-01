@@ -1,0 +1,366 @@
+/* =====================================================================
+   HoverVoice — Estilos do leitor de PDF
+   ---------------------------------------------------------------------
+   Reaproveita a identidade visual do popup (azul-marinho e ciano).
+   Organização:
+     1. Variáveis e base
+     2. Acessibilidade
+     3. Barra de ferramentas
+     4. Mensagens e painel
+     5. Documento e páginas
+     6. Blocos narráveis
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   1. Variáveis e base
+   --------------------------------------------------------------------- */
+
+:root {
+    --cor-primaria: #00A8E8;
+    --cor-primaria-clara: #00c8ff;
+    --cor-primaria-escura: #0088cc;
+    --cor-fundo-inicio: #0a1e2e;
+    --cor-fundo-fim: #16213e;
+    --cor-superficie: rgba(15, 35, 65, 0.92);
+    --cor-borda: rgba(0, 168, 232, 0.3);
+    --cor-texto: #e0e0e0;
+    --cor-texto-suave: #9cc9e6;
+    --cor-erro: #ff8a80;
+    --cor-aviso: #ffd180;
+
+    --raio-borda: 12px;
+    --raio-borda-pequeno: 8px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-padding-top: 88px;
+}
+
+body {
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+                 Ubuntu, Cantarell, sans-serif;
+    background: linear-gradient(135deg, var(--cor-fundo-inicio) 0%, var(--cor-fundo-fim) 100%);
+    background-attachment: fixed;
+    color: var(--cor-texto);
+}
+
+[hidden] {
+    display: none !important;
+}
+
+/* ---------------------------------------------------------------------
+   2. Acessibilidade
+   --------------------------------------------------------------------- */
+
+.pular-para-conteudo {
+    position: absolute;
+    left: 12px;
+    top: -60px;
+    z-index: 30;
+    padding: 10px 16px;
+    border-radius: var(--raio-borda-pequeno);
+    background: var(--cor-primaria-clara);
+    color: #04202e;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.pular-para-conteudo:focus {
+    top: 12px;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+.documento:focus-visible {
+    outline: 3px solid var(--cor-primaria-clara);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+
+/* ---------------------------------------------------------------------
+   3. Barra de ferramentas
+   --------------------------------------------------------------------- */
+
+.barra {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px 24px;
+    padding: 12px 24px;
+    background: var(--cor-superficie);
+    border-bottom: 1px solid var(--cor-borda);
+    backdrop-filter: blur(8px);
+}
+
+.barra-identidade {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.barra-titulos {
+    min-width: 0;
+}
+
+.barra-titulos h1 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.barra-documento {
+    max-width: 38ch;
+    font-size: 13px;
+    color: var(--cor-texto-suave);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.barra-controles {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.botao {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 8px 14px;
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--raio-borda-pequeno);
+    background: rgba(0, 168, 232, 0.1);
+    color: var(--cor-texto);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.botao:hover:not(:disabled) {
+    background: rgba(0, 168, 232, 0.22);
+    border-color: var(--cor-primaria);
+}
+
+.botao:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.botao-icone {
+    min-width: 40px;
+    padding: 8px;
+    font-size: 20px;
+    line-height: 1;
+}
+
+.botao-destaque {
+    border: none;
+    background: linear-gradient(135deg, var(--cor-primaria) 0%, var(--cor-primaria-escura) 100%);
+    color: #ffffff;
+}
+
+.botao-destaque:hover:not(:disabled) {
+    background: linear-gradient(135deg, var(--cor-primaria-clara) 0%, var(--cor-primaria) 100%);
+}
+
+.botao-narracao[aria-pressed="true"] {
+    border-color: var(--cor-primaria-clara);
+    background: rgba(0, 168, 232, 0.32);
+    color: #ffffff;
+}
+
+.grupo-zoom {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.valor-zoom {
+    min-width: 4ch;
+    text-align: center;
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------------------
+   4. Mensagens e painel
+   --------------------------------------------------------------------- */
+
+.mensagem {
+    max-width: 760px;
+    margin: 16px auto 0;
+    padding: 10px 14px;
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--raio-borda-pequeno);
+    background: rgba(0, 168, 232, 0.1);
+    color: var(--cor-texto-suave);
+    font-size: 14px;
+}
+
+.mensagem[data-tipo="erro"] {
+    border-color: rgba(255, 138, 128, 0.5);
+    background: rgba(255, 138, 128, 0.12);
+    color: var(--cor-erro);
+}
+
+.mensagem[data-tipo="aviso"] {
+    border-color: rgba(255, 209, 128, 0.5);
+    background: rgba(255, 209, 128, 0.1);
+    color: var(--cor-aviso);
+}
+
+.painel {
+    max-width: 560px;
+    margin: 12vh auto 0;
+    padding: 32px;
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--raio-borda);
+    background: var(--cor-superficie);
+}
+
+.painel h2 {
+    margin-bottom: 8px;
+    font-size: 22px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.painel p {
+    margin-bottom: 20px;
+    max-width: 60ch;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--cor-texto-suave);
+}
+
+.painel-acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.formulario-senha {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.formulario-senha label {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.formulario-senha input {
+    max-width: 320px;
+    padding: 10px 12px;
+    border: 1px solid rgba(0, 168, 232, 0.35);
+    border-radius: var(--raio-borda-pequeno);
+    background: rgba(10, 30, 46, 0.7);
+    color: var(--cor-texto);
+    font: inherit;
+}
+
+.painel[data-arrastando="true"] {
+    border-color: var(--cor-primaria-clara);
+    background: rgba(0, 168, 232, 0.16);
+}
+
+/* ---------------------------------------------------------------------
+   5. Documento e páginas
+   --------------------------------------------------------------------- */
+
+.documento {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 24px 16px 64px;
+}
+
+.documento:focus {
+    outline: none;
+}
+
+.pagina {
+    position: relative;
+    flex-shrink: 0;
+    max-width: none;
+    background: #ffffff;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+}
+
+.pagina canvas {
+    display: block;
+}
+
+.pagina-erro {
+    padding: 24px;
+    color: #5a1a14;
+    font-size: 14px;
+}
+
+/* Telas estreitas: a página rola na horizontal em vez de ser cortada. */
+@media (max-width: 900px) {
+    .documento {
+        align-items: flex-start;
+        overflow-x: auto;
+    }
+}
+
+/* ---------------------------------------------------------------------
+   6. Blocos narráveis
+   ---------------------------------------------------------------------
+   Cada bloco é uma área transparente sobre um parágrafo da página. Ele
+   recebe o mouse e o foco do teclado; o texto que carrega é o que o
+   content.js lê em voz alta. O realce durante a fala (classe
+   .hovervoice-speaking) é injetado pelo content.js.
+   --------------------------------------------------------------------- */
+
+.bloco-pdf {
+    position: absolute;
+    overflow: hidden;
+    border-radius: 3px;
+    color: transparent;
+    font: 12px/1 sans-serif;
+    white-space: nowrap;
+    user-select: none;
+    cursor: default;
+    /* No modo de alto contraste do Windows, o texto não deve reaparecer. */
+    forced-color-adjust: none;
+}
+
+body[data-narracao="ligada"] .bloco-pdf:hover {
+    background: rgba(0, 168, 232, 0.1);
+    outline: 1px dashed rgba(0, 136, 204, 0.8);
+}
+
+.bloco-pdf:focus-visible {
+    outline: 3px solid var(--cor-primaria-clara);
+    outline-offset: 1px;
+}

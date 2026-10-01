@@ -1,12 +1,17 @@
 {
   "manifest_version": 3,
   "name": "HoverVoice",
-  "version": "1.1.0",
-  "description": "Acessibilidade para deficiência visual - Narrador ao passar o mouse",
+  "version": "1.2.0",
+  "description": "Acessibilidade para deficiência visual - Narrador ao passar o mouse, inclusive em PDFs",
 
   "permissions": [
     "storage",
-    "activeTab"
+    "activeTab",
+    "webRequest"
+  ],
+
+  "host_permissions": [
+    "<all_urls>"
   ],
 
   "action": {
@@ -47,6 +52,15 @@
         "linux": "Alt+A"
       },
       "description": "Ativar/Desativar HoverVoice"
+    },
+    "open-pdf-viewer": {
+      "suggested_key": {
+        "default": "Alt+P",
+        "windows": "Alt+P",
+        "mac": "Alt+P",
+        "linux": "Alt+P"
+      },
+      "description": "Abrir o PDF desta aba no leitor HoverVoice"
     }
   }
 }

@@ -26,7 +26,8 @@
         voiceRate: 1,
         voicePitch: 1,
         voiceVolume: 1,
-        language: 'pt-BR'
+        language: 'pt-BR',
+        pdfAutoOpen: true
     });
 
     /** Elementos passíveis de narração (RF-04). */
@@ -36,7 +37,9 @@
         'li', 'td', 'th', 'label',
         'input', 'select', 'textarea',
         'img', 'svg',
-        '[role="button"]', '[role="link"]', '[role="heading"]'
+        '[role="button"]', '[role="link"]', '[role="heading"]',
+        // Blocos de texto do leitor de PDF (viewer.js): um por parágrafo.
+        '.bloco-pdf'
     ].join(', ');
 
     /** Limite de caracteres por locução (RN-03). */

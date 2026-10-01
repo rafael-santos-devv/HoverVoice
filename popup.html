@@ -45,6 +45,26 @@
             </div>
         </section>
 
+        <!-- Abertura automática de PDFs -->
+        <section class="toggle-section pdf-section" aria-labelledby="pdfTitle">
+            <div class="toggle-content">
+                <div class="toggle-info">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm-1 7V3.5L18.5 9H13z" fill="#00A8E8"/>
+                    </svg>
+                    <div>
+                        <h2 id="pdfTitle">Abrir PDFs no leitor</h2>
+                        <p id="pdfSubtext">Narração dos PDFs ao passar o mouse</p>
+                    </div>
+                </div>
+                <label class="toggle-switch" for="pdfAutoToggle">
+                    <span class="visually-hidden">Abrir PDFs automaticamente no leitor do HoverVoice</span>
+                    <input type="checkbox" id="pdfAutoToggle" aria-describedby="pdfSubtext">
+                    <span class="slider" aria-hidden="true"></span>
+                </label>
+            </div>
+        </section>
+
         <!-- Mensagens da interface -->
         <p id="statusMessage" class="status-message" role="status" aria-live="polite" hidden></p>
 
@@ -116,6 +136,10 @@
                 <kbd class="key">Alt + A</kbd>
             </div>
             <div class="shortcut-item">
+                <span>Abrir PDF no leitor</span>
+                <kbd class="key">Alt + P</kbd>
+            </div>
+            <div class="shortcut-item">
                 <span>Próximo elemento</span>
                 <kbd class="key">Tab</kbd>
             </div>
@@ -163,7 +187,7 @@
     </main>
 
     <footer class="footer">
-        <p>HoverVoice v1.1 · Idioma: Português (Brasil)</p>
+        <p>HoverVoice v1.2 · Idioma: Português (Brasil)</p>
     </footer>
 
     <script src="popup.js"></script>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leitor de PDF — HoverVoice</title>
+    <link rel="stylesheet" href="viewer.css">
+</head>
+<body data-narracao="desligada">
+    <a class="pular-para-conteudo" href="#documento">Ir para o conteúdo do PDF</a>
+
+    <!-- Barra de ferramentas -->
+    <header class="barra" role="banner">
+        <div class="barra-identidade">
+            <svg width="28" height="28" viewBox="0 0 40 40" fill="none" aria-hidden="true" focusable="false">
+                <circle cx="20" cy="20" r="18" fill="#00A8E8"/>
+                <path d="M20 8C13.925 8 9 12.925 9 19C9 25.075 13.925 30 20 30C26.075 30 31 25.075 31 19" stroke="white" stroke-width="2" fill="none"/>
+                <circle cx="20" cy="19" r="3" fill="white"/>
+            </svg>
+            <div class="barra-titulos">
+                <h1>Leitor de PDF</h1>
+                <p id="tituloDocumento" class="barra-documento">Nenhum arquivo aberto</p>
+            </div>
+        </div>
+
+        <div class="barra-controles" role="toolbar" aria-label="Controles do leitor">
+            <button type="button" id="botaoAbrir" class="botao">
+                <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/></svg>
+                Abrir arquivo
+            </button>
+
+            <button type="button" id="botaoBaixar" class="botao" disabled>
+                <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                Baixar cópia
+            </button>
+
+            <div class="grupo-zoom" role="group" aria-label="Tamanho do documento">
+                <button type="button" id="botaoZoomMenos" class="botao botao-icone" aria-label="Diminuir o tamanho" disabled>−</button>
+                <output id="valorZoom" class="valor-zoom" aria-live="polite">—</output>
+                <button type="button" id="botaoZoomMais" class="botao botao-icone" aria-label="Aumentar o tamanho" disabled>+</button>
+            </div>
+
+            <button type="button" id="botaoNarracao" class="botao botao-narracao" aria-pressed="false">
+                <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+                <span id="textoNarracao">Narração desligada</span>
+            </button>
+        </div>
+    </header>
+
+    <input type="file" id="entradaArquivo" accept="application/pdf,.pdf" hidden>
+
+    <!-- Mensagens do leitor, anunciadas por tecnologias assistivas -->
+    <p id="mensagem" class="mensagem" role="status" aria-live="polite" hidden></p>
+
+    <!-- Painel: estado inicial, carregamento, erro e pedido de senha -->
+    <section id="painel" class="painel" aria-labelledby="painelTitulo">
+        <h2 id="painelTitulo">Abra um PDF para ouvi-lo</h2>
+        <p id="painelTexto">Escolha um arquivo ou arraste-o para esta janela. Depois, passe o mouse sobre o texto ou navegue com a tecla Tab.</p>
+
+        <form id="formularioSenha" class="formulario-senha" hidden>
+            <label for="campoSenha">Senha do PDF</label>
+            <input type="password" id="campoSenha" autocomplete="off">
+            <div class="painel-acoes">
+                <button type="submit" class="botao botao-destaque">Abrir PDF</button>
+                <button type="button" id="botaoCancelarSenha" class="botao">Cancelar</button>
+            </div>
+        </form>
+
+        <div id="painelAcoes" class="painel-acoes">
+            <button type="button" id="painelAbrir" class="botao botao-destaque">Escolher arquivo</button>
+            <button type="button" id="painelNativo" class="botao" hidden>Abrir no visualizador do navegador</button>
+        </div>
+    </section>
+
+    <!-- Documento -->
+    <main id="documento" class="documento" tabindex="-1" aria-label="Conteúdo do PDF" hidden></main>
+
+    <script src="content.js"></script>
+    <script type="module" src="viewer.js"></script>
+</body>
+</html>
