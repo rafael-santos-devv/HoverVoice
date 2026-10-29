@@ -1,0 +1,65 @@
+# TASKS — HoverVoice
+
+Quadro Kanban do projeto. Mova cada tarefa entre as colunas e marque ✅ ao concluir. Uma tarefa por vez.
+
+## Important Tasks
+
+Valem para **cada** tarefa deste quadro. Antes de começar e ao terminar, confira tudo desta seção.
+
+- Procure skills para a tarefa que vai começar, com `vercel-labs/skills@find-skills`. O objetivo é um bom design na aplicação e boa legibilidade de código. **Liste as opções e peça confirmação antes de instalar qualquer skill** (sem `-g`).
+- Valide, teste e corrija a cada mudança, seguindo a seção "Validação" do `CLAUDE.md`. Só marque ✅ depois que o teste passar.
+- Separe as mudanças em commits pequenos, em uma branch por tarefa, e envie a branch para o repositório `https://github.com/rafael-santos-devv/HoverVoice.git`. O autor é o usuário global do git da máquina. O merge na `main` fica com o dono.
+- Atualize este quadro ao iniciar (A fazer → Em andamento) e ao concluir (Em andamento → Concluído ✅).
+
+## Em andamento
+
+_(nenhuma)_
+
+## A fazer
+
+Inclua no .gitignore os .md, menos o README.md
+
+### 1. Arquitetura fácil de evoluir
+Organizar o código para que novas features entrem sem mexer em vários arquivos e para que um novo dev entenda a aplicação inteira lendo pouco.
+- [x] Extrair o que hoje está duplicado em `background.js`, `content.js`, `popup.js` e `viewer.js` (`DEFAULT_STATE`, `STORAGE_KEY`, `clamp`, leitura/gravação do estado) para um único módulo compartilhado.
+- [x] Resolver a restrição de que `content.js` não aceita `import`: decidir e documentar como compartilhar esse código (ex.: script carregado antes no `manifest.json`).
+- [x] Definir a estrutura de pastas (ex.: `src/` com `background`, `content`, `popup`, `viewer`, `shared`), mantendo o projeto carregável sem build.
+- [ ] Reduzir comentários aos essenciais (o porquê, não o quê). Manter as referências `RF-xx` / `RN-xx`.
+- [x] Atualizar `manifest.json`, o `CLAUDE.md` e o mapa de arquivos depois de mover qualquer coisa.
+
+### 2. Refatoração e legibilidade
+- [ ] Quebrar funções longas (`viewer.js` tem ~770 linhas e `content.js` ~370) em funções pequenas com nomes claros.
+- [ ] Remover código morto e duplicação; padronizar nomes e o estilo de tratamento de erros.
+- [ ] Garantir que o comportamento não mudou (checklist de validação do `CLAUDE.md`, incluindo os PDFs de `exemplos/`).
+
+### 3. Nova UI do popup, moderna e com animações
+- [ ] Levantar a identidade atual (variáveis `--cor-*` em `popup.css`; tema escuro azul, `#00A8E8`) e propor a direção visual no Figma antes de codar.
+- [ ] Usar `imskyleen/animate-ui` como referência de animações e reproduzi-las em CSS/JS puro (sem React). Se algum efeito não tiver equivalente nativo, adaptar até o resultado visual ficar igual.
+- [ ] Animações respeitam `prefers-reduced-motion`; contraste e foco visível preservados (público com baixa visão).
+- [ ] Aplicar o mesmo visual ao leitor de PDF (`viewer.html/css`) para manter coerência.
+
+### 4. Tela de login e preferências salvas
+Usuários que criarem login poderão salvar suas preferências de voz (velocidade, tom, volume e demais ajustes) e recuperá-las em outro navegador.
+- [ ] **Definir antes de começar (perguntar ao dono):**
+  - tecnologia do backend (linguagem, banco de dados, hospedagem);
+  - tipo de autenticação (e-mail e senha, login social, token JWT ou sessão);
+  - o que significa "intensidade" nas preferências (hoje existem velocidade, tom e volume);
+  - ações da tela: criar conta, entrar, sair, recuperar senha.
+- [ ] Desenhar a tela de login no Figma (arquivo do `CLAUDE.md`), incluindo estados de erro, carregando e sucesso. **Aguardar aprovação do design.**
+- [ ] Contrato da API do backend (rotas de cadastro, login e leitura/gravação de preferências) documentado antes de implementar.
+- [ ] Implementar a tela no popup, guardando só o token em `chrome.storage.local` e usando HTTPS. Atualizar `host_permissions` somente para o domínio do backend, se possível.
+- [ ] Sincronizar as preferências com o backend sem quebrar o uso offline/sem login.
+- [ ] Testar: cadastro, login, logout, token expirado, backend fora do ar, sem internet.
+
+### 5. Atualizar documentação e Markdowns (por último)
+Fica por último para refletir o código já refatorado. Itens já encontrados desatualizados:
+- [ ] `config.json`: versão `1.0.0` (manifest está em `1.2.0`); `file-structure` cita `images/icon128.svg` e omite `background.js`, `viewer.*`, `pdf-blocks.js`, `lib/`; `permissions` lista `scripting`, mas o manifest usa `storage`, `activeTab`, `webRequest` e `<all_urls>`; não menciona `Alt+P` nem o leitor de PDF.
+- [ ] `README.md`: em "Limitações conhecidas" diz que não lê PDFs, mas a própria seção "Leitura de PDFs" descreve o leitor; diz que `DEFAULT_STATE` está em três arquivos (são quatro); a estrutura de pastas não lista `docs/`, `exemplos/` e `INSTALACAO.html`; a tabela "DOC-01 a DOC-04" não bate com os PDFs de `docs/`.
+- [ ] `RESUMO.md`: versão `1.0.0`; ícone SVG (hoje são PNG); afirma usar `MutationObserver` (o README diz que não usa); lista "Suporte a PDF" como futuro; lista só 5 arquivos principais.
+- [ ] `INICIO_RAPIDO.md` e `CHECKLIST.md`: versão `1.0.0`, ícone SVG e nenhum item sobre PDF ou `Alt+P`.
+- [ ] Ainda **não verificados**: `INSTALACAO.html`, `TESTE.html` e os dois PDFs em `docs/`. Conferir e corrigir.
+- [ ] Atualizar também tudo que as tarefas 1 a 4 mudarem (estrutura, login, UI) e revisar se os cinco Markdowns não repetem o mesmo conteúdo; consolidar se fizer sentido.
+
+## Concluído ✅
+
+_(nenhuma)_
