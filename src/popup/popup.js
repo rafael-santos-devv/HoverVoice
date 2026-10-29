@@ -30,6 +30,7 @@
         pdfAuto: document.getElementById('pdfAutoToggle'),
         statusText: document.getElementById('statusText'),
         statusSubtext: document.getElementById('statusSubtext'),
+        chipText: document.getElementById('statusChipText'),
         testInput: document.getElementById('testInput'),
         testButton: document.getElementById('testButton'),
         message: document.getElementById('statusMessage'),
@@ -90,16 +91,14 @@
     // =====================================================================
 
     function renderStatus() {
-        ui.toggle.checked = state.enabled;
-        ui.toggle.setAttribute('aria-checked', String(state.enabled));
+        const { enabled } = state;
+        ui.toggle.checked = enabled;
+        ui.toggle.setAttribute('aria-checked', String(enabled));
+        document.body.dataset.estado = enabled ? 'ativo' : 'inativo';
 
-        if (state.enabled) {
-            ui.statusText.textContent = 'HoverVoice Ativo';
-            ui.statusSubtext.textContent = 'Passe o mouse para ouvir';
-        } else {
-            ui.statusText.textContent = 'HoverVoice Inativo';
-            ui.statusSubtext.textContent = 'Clique para ativar';
-        }
+        ui.statusText.textContent = enabled ? 'HoverVoice ativo' : 'HoverVoice inativo';
+        ui.statusSubtext.textContent = enabled ? 'Passe o mouse ou use Tab' : 'Ative para ouvir a página';
+        ui.chipText.textContent = enabled ? 'Ativo' : 'Inativo';
     }
 
     function renderPdfSettings() {
@@ -114,6 +113,10 @@
         ui.rateValue.textContent = `${state.voiceRate.toFixed(1)}x`;
         ui.pitchValue.textContent = `${state.voicePitch.toFixed(1)}x`;
         ui.volumeValue.textContent = `${Math.round(state.voiceVolume * 100)}%`;
+
+        [[ui.rate, RATE_RANGE], [ui.pitch, PITCH_RANGE], [ui.volume, VOLUME_RANGE]].forEach(([control, { min, max }]) => {
+            control.style.setProperty('--progresso', `${((control.value - min) / (max - min)) * 100}%`);
+        });
     }
 
     function render() {
