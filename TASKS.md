@@ -22,12 +22,12 @@ Inclua no .gitignore os .md, menos o README.md
 ### 4. Tela de login e preferências salvas
 Usuários que criarem login poderão salvar suas preferências de voz (velocidade, tom, volume e demais ajustes) e recuperá-las em outro navegador.
 - [x] **Decisões do dono:** login e registro são **opcionais** e **minimalistas**; autenticação **só com Google** (entrar e criar conta são o mesmo fluxo); as preferências sincronizadas são velocidade, tom e volume (não existe "intensidade"). Sem e-mail/senha, logo sem "recuperar senha".
-- [ ] **Ainda em aberto (perguntar ao dono):** tecnologia do backend (linguagem, banco, hospedagem) e o Client ID do Google (projeto no Google Cloud).
+- [x] Backend: Node.js + SQLite, sem dependências, em `../HoverVoice-backend` (repositório git local, 5 testes passando). **Pendente do dono:** criar o cliente OAuth no Google Cloud (passos em `docs/api-contrato.md`), preencher `GOOGLE_CLIENT_ID`/`API_BASE_URL` em `src/shared/auth.js` e escolher a hospedagem com HTTPS.
 - [x] Desenhar a tela de login no Figma (seção "Login com Google · proposta", nó `51:12`): convite, entrada, carregando, erro e logado. **Aguardando aprovação do design.**
-- [ ] Contrato da API do backend (rotas de cadastro, login e leitura/gravação de preferências) documentado antes de implementar.
-- [ ] Implementar a tela no popup, guardando só o token em `chrome.storage.local` e usando HTTPS. Atualizar `host_permissions` somente para o domínio do backend, se possível.
-- [ ] Sincronizar as preferências com o backend sem quebrar o uso offline/sem login.
-- [ ] Testar: cadastro, login, logout, token expirado, backend fora do ar, sem internet.
+- [x] Contrato da API do backend (rotas de cadastro, login e leitura/gravação de preferências) documentado antes de implementar.
+- [x] Implementar a tela no popup, guardando só o token em `chrome.storage.local` e usando HTTPS. Atualizar `host_permissions` somente para o domínio do backend, se possível.
+- [x] Sincronizar as preferências com o backend sem quebrar o uso offline/sem login.
+- [ ] Testar com o Google de verdade (login, logout, token expirado). Já testados com o Google simulado: login, logout, sincronização, sem Client ID e backend fora do ar.
 
 ### 5. Atualizar documentação e Markdowns (por último)
 Fica por último (depois da Tarefa 6) para refletir o código já refatorado. Itens já encontrados desatualizados:

@@ -13,7 +13,7 @@ Extensão de navegador (Chrome/Edge, Manifest V3) de acessibilidade para pessoas
 - JavaScript puro (ES2022). **Sem build, sem bundler, sem `package.json`, sem frameworks.** Não adicione React nem dependências npm.
 - A extensão é carregada "sem compactação" (`chrome://extensions` → Modo de desenvolvedor → pasta do projeto). Depois de editar, recarregue a extensão e a página de teste.
 - `lib/` contém o PDF.js de terceiros. **Não edite nada em `lib/`.**
-- Permissões do `manifest.json` (`storage`, `activeTab`, `webRequest`, `<all_urls>`): não amplie sem necessidade e documente o motivo.
+- Permissões do `manifest.json` (`storage`, `activeTab`, `webRequest`, `identity`, `<all_urls>`): não amplie sem necessidade e documente o motivo. `identity` existe só para o login opcional com Google (`chrome.identity.launchWebAuthFlow`).
 - Todo texto visível ao usuário em português (pt-BR).
 
 ## Arquivos e responsabilidades
@@ -22,6 +22,7 @@ Extensão de navegador (Chrome/Edge, Manifest V3) de acessibilidade para pessoas
 |---|---|
 | `manifest.json` | Configuração, permissões e atalhos (`Alt+A` ativa/desativa, `Alt+P` abre PDF no leitor) |
 | `src/shared/state.js` | Script comum que publica o global `HoverVoice` (`STORAGE_KEY`, `DEFAULT_STATE`, faixas de voz, `clamp`, `readState`, `writeState`, `stateFromChange`). Carregado antes de todos os demais |
+| `src/shared/auth.js` | Script comum que publica `HoverVoiceAuth`: login com Google, sessão (`authSession`) e sincronização das preferências de voz com o backend. Só o popup o usa. Contrato em `docs/api-contrato.md` |
 | `src/background/background.js` | Service worker: estado padrão, atalhos, detecção e redirecionamento de PDFs |
 | `src/content/content.js` | Roda em cada página (e no `viewer.html`): captura o elemento sob o cursor/foco e narra via Web Speech API |
 | `src/popup/popup.html/css/js` | Interface da extensão: ativar, testar voz, velocidade/tom/volume, abrir PDFs no leitor |
@@ -75,5 +76,5 @@ Se não for possível rodar o navegador, diga claramente o que foi e o que não 
 ## Figma e login (decisões já tomadas)
 
 - O Figma está conectado por MCP. Arquivo: `https://www.figma.com/design/VkEoAoAWapcuyIX7WpGqhy?node-id=13-2` (fileKey `VkEoAoAWapcuyIX7WpGqhy`, nó `13:2`). O design vem antes do código: crie a tela no Figma, mostre ao dono e **só comece o código depois da aprovação**.
-- O login usa um **backend próprio** (a tecnologia ainda não foi definida; ver `TASKS.md`). A extensão nunca guarda senha, nem mantém chaves ou segredos no código; guarde apenas o token de sessão em `chrome.storage.local`. Toda comunicação com o backend deve usar HTTPS.
+- O login é **opcional**, só com Google, e usa um **backend próprio** em Node.js + SQLite, em repositório separado (`../HoverVoice-backend`; contrato em `docs/api-contrato.md`). A extensão nunca guarda senha, nem mantém chaves ou segredos no código; guarde apenas o token de sessão em `chrome.storage.local`. Toda comunicação com o backend deve usar HTTPS.
 - Sem login, a extensão continua funcionando como hoje, com preferências locais. O login só habilita salvar e sincronizar preferências.
