@@ -19,11 +19,6 @@ _(nenhuma)_
 
 Inclua no .gitignore os .md, menos o README.md
 
-### 2. Refatoração e legibilidade
-- [ ] Quebrar funções longas (`viewer.js` tem ~770 linhas e `content.js` ~370) em funções pequenas com nomes claros.
-- [ ] Remover código morto e duplicação; padronizar nomes e o estilo de tratamento de erros.
-- [ ] Garantir que o comportamento não mudou (checklist de validação do `CLAUDE.md`, incluindo os PDFs de `exemplos/`).
-
 ### 3. Nova UI do popup, moderna e com animações
 - [ ] Levantar a identidade atual (variáveis `--cor-*` em `popup.css`; tema escuro azul, `#00A8E8`) e propor a direção visual no Figma antes de codar.
 - [ ] Usar `imskyleen/animate-ui` como referência de animações e reproduzi-las em CSS/JS puro (sem React). Se algum efeito não tiver equivalente nativo, adaptar até o resultado visual ficar igual.
@@ -62,3 +57,7 @@ Organizar o código para que novas features entrem sem mexer em vários arquivos
 - [x] Reduzir comentários aos essenciais (o porquê, não o quê). Manter as referências `RF-xx` / `RN-xx`.
 - [x] Atualizar `manifest.json`, o `CLAUDE.md` e o mapa de arquivos depois de mover qualquer coisa.
 
+### ✅ 2. Refatoração e legibilidade
+- [x] Quebrar funções longas (`viewer.js` tem ~770 linhas e `content.js` ~370) em funções pequenas com nomes claros.
+- [x] Remover código morto e duplicação; padronizar nomes e o estilo de tratamento de erros.
+- [x] Garantir que o comportamento não mudou (checklist de validação do `CLAUDE.md`, incluindo os PDFs de `exemplos/`).
