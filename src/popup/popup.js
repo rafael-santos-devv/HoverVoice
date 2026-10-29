@@ -18,6 +18,7 @@
         DEFAULT_STATE, RATE_RANGE, PITCH_RANGE, VOLUME_RANGE,
         clamp, readState, writeState, stateFromChange
     } = HoverVoice;
+    const auth = HoverVoiceAuth;
 
     const MESSAGE_TIMEOUT_MS = 4000;
 
@@ -39,7 +40,27 @@
         volume: document.getElementById('voiceVolume'),
         rateValue: document.getElementById('rateValue'),
         pitchValue: document.getElementById('pitchValue'),
-        volumeValue: document.getElementById('volumeValue')
+        volumeValue: document.getElementById('volumeValue'),
+        accountCard: document.getElementById('cartaoConta'),
+        accountLoggedOut: document.getElementById('contaSaiu'),
+        accountLoggedIn: document.getElementById('contaEntrou'),
+        accountEmail: document.getElementById('contaEmail'),
+        accountButton: document.getElementById('botaoConta'),
+        loginScreen: document.getElementById('telaLogin'),
+        loginTitle: document.getElementById('loginTitulo'),
+        loginText: document.getElementById('loginTexto'),
+        loginError: document.getElementById('loginErro'),
+        loginProgress: document.getElementById('loginProgresso'),
+        googleButton: document.getElementById('botaoGoogle'),
+        googleButtonText: document.getElementById('botaoGoogleTexto'),
+        skipButton: document.getElementById('botaoSemConta')
+    };
+
+    const LOGIN_ERRORS = {
+        'not-configured': 'Login com Google ainda não configurado.',
+        network: 'Sem conexão com o servidor. Suas preferências locais continuam salvas.',
+        google: 'O Google não concluiu o login. Tente de novo.',
+        server: 'O servidor não respondeu como esperado. Tente mais tarde.'
     };
 
     // =====================================================================
@@ -123,6 +144,124 @@
         renderStatus();
         renderPdfSettings();
         renderVoiceSettings();
+    }
+
+    // =====================================================================
+    // Conta (opcional)
+    // =====================================================================
+
+    // Invalida tentativas de login abandonadas (a janela do Google não pode ser cancelada por código).
+    let loginAttempt = 0;
+
+    function renderAccount(session) {
+        const loggedIn = Boolean(session);
+        ui.accountCard.dataset.logado = String(loggedIn);
+        ui.accountLoggedOut.hidden = loggedIn;
+        ui.accountLoggedIn.hidden = !loggedIn;
+        ui.accountEmail.textContent = session?.email || '';
+        ui.accountButton.textContent = loggedIn ? 'Sair' : 'Entrar';
+    }
+
+    /** estado: 'entrada' | 'carregando' | 'erro'. */
+    function showLoginScreen(estado, errorMessage = '') {
+        document.body.dataset.tela = 'login';
+        ui.loginScreen.hidden = false;
+
+        const loading = estado === 'carregando';
+        ui.loginTitle.textContent = loading ? 'Entrando…' : 'Entrar ou criar conta';
+        ui.loginText.textContent = loading
+            ? 'Conclua o login na janela do Google.'
+            : 'Use sua conta Google. Se for a primeira vez, criamos sua conta automaticamente. Só salvamos suas preferências de voz.';
+        ui.loginProgress.hidden = !loading;
+        ui.loginError.hidden = estado !== 'erro';
+        ui.loginError.textContent = errorMessage;
+        ui.googleButton.disabled = loading;
+        ui.googleButtonText.textContent = loading ? 'Aguardando o Google…'
+            : estado === 'erro' ? 'Tentar novamente' : 'Continuar com Google';
+        ui.skipButton.textContent = loading ? 'Cancelar' : 'Agora não, continuar sem conta';
+        (loading ? ui.skipButton : ui.googleButton).focus();
+    }
+
+    function closeLoginScreen() {
+        loginAttempt += 1;
+        delete document.body.dataset.tela;
+        ui.loginScreen.hidden = true;
+        ui.accountButton.focus();
+    }
+
+    /** Aplica as preferências da conta; se a conta é nova, envia as locais. */
+    async function adoptAccountPreferences(remote) {
+        if (!remote) {
+            await auth.pushPreferences(state);
+            return;
+        }
+        state = { ...state, ...remote };
+        renderVoiceSettings();
+        await saveState();
+    }
+
+    async function handleGoogleSignIn() {
+        const attempt = ++loginAttempt;
+        showLoginScreen('carregando');
+        try {
+            const { preferences } = await auth.signInWithGoogle();
+            if (attempt !== loginAttempt) return;
+            await adoptAccountPreferences(preferences);
+            renderAccount(await auth.readSession());
+            closeLoginScreen();
+            showMessage('Conta conectada. Suas preferências estão sincronizadas.');
+        } catch (error) {
+            if (attempt !== loginAttempt) return;
+            if (error.code === 'cancelled') {
+                showLoginScreen('entrada');
+                return;
+            }
+            console.error('[HoverVoice] Falha no login:', error);
+            showLoginScreen('erro', LOGIN_ERRORS[error.code] || LOGIN_ERRORS.server);
+        }
+    }
+
+    async function handleAccountButton() {
+        if (ui.accountCard.dataset.logado !== 'true') {
+            showLoginScreen('entrada');
+            return;
+        }
+        await auth.signOut();
+        renderAccount(null);
+        showMessage('Você saiu da conta. Suas preferências continuam neste navegador.');
+    }
+
+    /** Envia as preferências de voz à conta, avisando só se algo der errado. */
+    async function syncPreferences() {
+        try {
+            await auth.pushPreferences(state);
+        } catch (error) {
+            if (error.code === 'expired') renderAccount(null);
+            showMessage(error.code === 'expired'
+                ? 'Sua sessão expirou. Entre de novo para sincronizar.'
+                : 'Sem conexão: suas preferências foram salvas só neste navegador.', 'error');
+        }
+    }
+
+    /** Ao abrir o popup, a conta é a fonte dos campos sincronizados. */
+    async function restoreSession() {
+        const session = await auth.readSession();
+        renderAccount(session);
+        if (!session) return;
+
+        try {
+            const remote = await auth.pullPreferences();
+            if (remote) {
+                state = { ...state, ...remote };
+                renderVoiceSettings();
+                await saveState();
+            }
+        } catch (error) {
+            if (error.code === 'expired') {
+                renderAccount(null);
+                showMessage('Sua sessão expirou. Entre de novo para sincronizar.', 'error');
+            }
+        }
     }
 
     // =====================================================================
@@ -213,7 +352,12 @@
 
         [ui.rate, ui.pitch, ui.volume].forEach((control) => {
             control.addEventListener('input', handleVoiceSettingsChange);
+            control.addEventListener('change', syncPreferences);
         });
+
+        ui.accountButton.addEventListener('click', handleAccountButton);
+        ui.googleButton.addEventListener('click', handleGoogleSignIn);
+        ui.skipButton.addEventListener('click', closeLoginScreen);
 
         chrome.storage.onChanged.addListener(handleExternalStateChange);
     }
@@ -222,6 +366,7 @@
         state = await readState();
         render();
         attachListeners();
+        await restoreSession();
     }
 
     init();
