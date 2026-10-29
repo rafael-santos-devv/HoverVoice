@@ -329,19 +329,11 @@ function fitWidthScale() {
     return clamp(Math.round((available / baseSize.width) * 20) / 20, { min: 0.75, max: 1.5 });
 }
 
-async function openDocument(bytes, name, origin) {
-    const currentLoad = ++loadId;
-
-    disposeDocument();
-    setControlsEnabled(false);
-    hideMessage();
-    showPanel({ title: 'Abrindo o PDF…', text: 'Isso leva só alguns instantes.', showPicker: false });
-
-    pdfName = /\.pdf$/i.test(name) ? name : `${name}.pdf`;
-    sourceUrl = origin;
-    pdfBlob = new Blob([bytes], { type: 'application/pdf' });
-
-    // O PDF.js assume a posse do buffer; por isso o Blob foi criado antes.
+/**
+ * Inicia o carregamento no PDF.js e trata a senha. O objeto devolvido expõe
+ * `wasCancelled()` para distinguir "pessoa desistiu da senha" de erro real.
+ */
+function startLoading(bytes) {
     const loadingTask = pdfjsLib.getDocument({
         data: bytes,
         cMapUrl: LIB_URL('cmaps/'),
@@ -363,12 +355,52 @@ async function openDocument(bytes, name, origin) {
         }
     };
 
+    return { promise: loadingTask.promise, wasCancelled: () => cancelledByUser };
+}
+
+/** Lê tamanho da página 1 e título, e atualiza o cabeçalho da janela. */
+async function readDocumentInfo() {
+    const firstPage = await pdf.getPage(1);
+    const firstViewport = firstPage.getViewport({ scale: 1 });
+    baseSize = { width: firstViewport.width, height: firstViewport.height };
+    firstPage.cleanup();
+
+    const meta = await pdf.getMetadata().catch(() => null);
+    const title = pickTitle(meta?.info?.Title, pdfName);
+    ui.titulo.textContent = title;
+    ui.titulo.title = title;
+    document.title = `${title} — HoverVoice`;
+    return title;
+}
+
+function announceOpened(title) {
+    const count = pdf.numPages;
+    const pagesLabel = count === 1 ? '1 página' : `${count} páginas`;
+    const hint = state.enabled ? '' : ' A narração está desligada: pressione Alt+A para ligá-la.';
+    announce(`Documento aberto: ${title}, ${pagesLabel}.${hint}`);
+}
+
+async function openDocument(bytes, name, origin) {
+    const currentLoad = ++loadId;
+
+    disposeDocument();
+    setControlsEnabled(false);
+    hideMessage();
+    showPanel({ title: 'Abrindo o PDF…', text: 'Isso leva só alguns instantes.', showPicker: false });
+
+    pdfName = /\.pdf$/i.test(name) ? name : `${name}.pdf`;
+    sourceUrl = origin;
+    // O PDF.js assume a posse do buffer; por isso o Blob é criado antes.
+    pdfBlob = new Blob([bytes], { type: 'application/pdf' });
+
+    const loading = startLoading(bytes);
+
     let doc;
     try {
-        doc = await loadingTask.promise;
+        doc = await loading.promise;
     } catch (error) {
         if (currentLoad !== loadId) return;
-        if (cancelledByUser) {
+        if (loading.wasCancelled()) {
             showEmptyPanel();
             return;
         }
@@ -387,28 +419,14 @@ async function openDocument(bytes, name, origin) {
     }
 
     pdf = doc;
-
-    const firstPage = await pdf.getPage(1);
-    const firstViewport = firstPage.getViewport({ scale: 1 });
-    baseSize = { width: firstViewport.width, height: firstViewport.height };
-    firstPage.cleanup();
-
-    const meta = await pdf.getMetadata().catch(() => null);
-    const title = pickTitle(meta?.info?.Title, pdfName);
-    ui.titulo.textContent = title;
-    ui.titulo.title = title;
-    document.title = `${title} — HoverVoice`;
+    const title = await readDocumentInfo();
 
     scale = loadSavedZoom() ?? fitWidthScale();
     buildPages();
     setControlsEnabled(true);
     showDocument();
     startObserving();
-
-    const count = pdf.numPages;
-    const pagesLabel = count === 1 ? '1 página' : `${count} páginas`;
-    const hint = state.enabled ? '' : ' A narração está desligada: pressione Alt+A para ligá-la.';
-    announce(`Documento aberto: ${title}, ${pagesLabel}.${hint}`);
+    announceOpened(title);
 }
 
 /** Cria o espaço reservado de cada página, com o tamanho já definitivo. */
@@ -479,39 +497,53 @@ function createBlock(block, pageNumber) {
     return el;
 }
 
+/** Cria o canvas da página e inicia o desenho; devolve também o tamanho em pixels CSS. */
+function createPageCanvas(page) {
+    const cssViewport = page.getViewport({ scale });
+    const pixelRatio = Math.min(window.devicePixelRatio || 1, MAX_PIXEL_RATIO);
+    const renderViewport = page.getViewport({ scale: scale * pixelRatio });
+
+    const cssWidth = `${Math.floor(cssViewport.width)}px`;
+    const cssHeight = `${Math.floor(cssViewport.height)}px`;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.floor(renderViewport.width);
+    canvas.height = Math.floor(renderViewport.height);
+    canvas.style.width = cssWidth;
+    canvas.style.height = cssHeight;
+    canvas.setAttribute('aria-hidden', 'true');
+
+    const task = page.render({ canvas, viewport: renderViewport });
+    return { canvas, task, cssViewport, cssWidth, cssHeight };
+}
+
+function showPageError(entry) {
+    const message = document.createElement('p');
+    message.className = 'pagina-erro';
+    message.textContent = 'Não foi possível exibir esta página.';
+    entry.el.replaceChildren(message);
+}
+
 async function renderPage(entry) {
     if (!entry || !pdf || entry.status !== 'idle') return;
 
     entry.status = 'rendering';
     const token = ++entry.token;
-    const ownerDocument = pdf;
 
     try {
-        const page = await ownerDocument.getPage(entry.number);
+        const page = await pdf.getPage(entry.number);
         if (token !== entry.token) return;
 
-        const cssViewport = page.getViewport({ scale });
-        const pixelRatio = Math.min(window.devicePixelRatio || 1, MAX_PIXEL_RATIO);
-        const renderViewport = page.getViewport({ scale: scale * pixelRatio });
-
-        entry.el.style.width = `${Math.floor(cssViewport.width)}px`;
-        entry.el.style.height = `${Math.floor(cssViewport.height)}px`;
-
-        const canvas = document.createElement('canvas');
-        canvas.width = Math.floor(renderViewport.width);
-        canvas.height = Math.floor(renderViewport.height);
-        canvas.style.width = `${Math.floor(cssViewport.width)}px`;
-        canvas.style.height = `${Math.floor(cssViewport.height)}px`;
-        canvas.setAttribute('aria-hidden', 'true');
-
-        const task = page.render({ canvas, viewport: renderViewport });
+        const { canvas, task, cssViewport, cssWidth, cssHeight } = createPageCanvas(page);
+        entry.el.style.width = cssWidth;
+        entry.el.style.height = cssHeight;
         entry.renderTask = task;
 
         const [textContent] = await Promise.all([page.getTextContent(), task.promise]);
         if (token !== entry.token) return;
 
-        const layer = document.createDocumentFragment();
         const blocks = buildBlocks(textContent.items, cssViewport);
+        const layer = document.createDocumentFragment();
         blocks.forEach((block) => layer.appendChild(createBlock(block, entry.number)));
 
         entry.el.replaceChildren(canvas, layer);
@@ -528,15 +560,11 @@ async function renderPage(entry) {
             );
         }
     } catch (error) {
-        if (error?.name === 'RenderingCancelledException') return;
-        if (token !== entry.token) return;
+        if (error?.name === 'RenderingCancelledException' || token !== entry.token) return;
 
         console.error(`[HoverVoice] Falha ao exibir a página ${entry.number}:`, error);
         entry.status = 'error';
-        const message = document.createElement('p');
-        message.className = 'pagina-erro';
-        message.textContent = 'Não foi possível exibir esta página.';
-        entry.el.replaceChildren(message);
+        showPageError(entry);
     }
 }
 
