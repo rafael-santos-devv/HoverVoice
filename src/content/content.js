@@ -15,20 +15,11 @@
 (() => {
     'use strict';
 
+    const { DEFAULT_STATE, RATE_RANGE, PITCH_RANGE, VOLUME_RANGE, clamp, readState, stateFromChange } = HoverVoice;
+
     // =====================================================================
     // Constantes
     // =====================================================================
-
-    const STORAGE_KEY = 'extensionState';
-
-    const DEFAULT_STATE = Object.freeze({
-        enabled: false,
-        voiceRate: 1,
-        voicePitch: 1,
-        voiceVolume: 1,
-        language: 'pt-BR',
-        pdfAutoOpen: true
-    });
 
     /** Elementos passíveis de narração (RF-04). */
     const NARRATABLE_SELECTOR = [
@@ -55,10 +46,6 @@
     const HIGHLIGHT_CLASS = 'hovervoice-speaking';
     const STYLE_ELEMENT_ID = 'hovervoice-styles';
 
-    const RATE_RANGE = { min: 0.5, max: 2 };
-    const PITCH_RANGE = { min: 0.5, max: 2 };
-    const VOLUME_RANGE = { min: 0, max: 1 };
-
     // =====================================================================
     // Estado interno
     // =====================================================================
@@ -71,13 +58,6 @@
     // =====================================================================
     // Utilitários
     // =====================================================================
-
-    /** Restringe um número a um intervalo. */
-    function clamp(value, { min, max }) {
-        const number = Number(value);
-        if (Number.isNaN(number)) return min;
-        return Math.min(Math.max(number, min), max);
-    }
 
     /** Normaliza espaços em branco e aplica o limite de caracteres. */
     function normalizeText(rawText) {
@@ -342,17 +322,6 @@
     // Sincronização de estado
     // =====================================================================
 
-    /** Carrega o estado persistido, completando campos ausentes. */
-    async function loadState() {
-        try {
-            const result = await chrome.storage.local.get(STORAGE_KEY);
-            return { ...DEFAULT_STATE, ...(result[STORAGE_KEY] || {}) };
-        } catch (error) {
-            console.error('[HoverVoice] Falha ao carregar o estado:', error);
-            return { ...DEFAULT_STATE };
-        }
-    }
-
     /**
      * Reage a alterações do estado feitas pelo popup ou pelo atalho de teclado.
      * Ao ser desativada, a extensão interrompe a locução em curso (RN-08).
@@ -360,10 +329,11 @@
      * essencial para quem aciona o atalho sem enxergar a interface.
      */
     function handleStateChange(changes, areaName) {
-        if (areaName !== 'local' || !changes[STORAGE_KEY]) return;
+        const newState = stateFromChange(changes, areaName);
+        if (!newState) return;
 
         const previousEnabled = state.enabled;
-        state = { ...DEFAULT_STATE, ...(changes[STORAGE_KEY].newValue || {}) };
+        state = newState;
 
         if (state.enabled === previousEnabled) return;
 
@@ -382,7 +352,7 @@
     // =====================================================================
 
     async function init() {
-        state = await loadState();
+        state = await readState();
 
         injectStyles();
 

@@ -14,20 +14,10 @@
     // Constantes
     // =====================================================================
 
-    const STORAGE_KEY = 'extensionState';
-
-    const DEFAULT_STATE = Object.freeze({
-        enabled: false,
-        voiceRate: 1,
-        voicePitch: 1,
-        voiceVolume: 1,
-        language: 'pt-BR',
-        pdfAutoOpen: true
-    });
-
-    const RATE_RANGE = { min: 0.5, max: 2 };
-    const PITCH_RANGE = { min: 0.5, max: 2 };
-    const VOLUME_RANGE = { min: 0, max: 1 };
+    const {
+        DEFAULT_STATE, RATE_RANGE, PITCH_RANGE, VOLUME_RANGE,
+        clamp, readState, writeState, stateFromChange
+    } = HoverVoice;
 
     const MESSAGE_TIMEOUT_MS = 4000;
 
@@ -62,12 +52,6 @@
     // Utilitários
     // =====================================================================
 
-    function clamp(value, { min, max }) {
-        const number = Number(value);
-        if (Number.isNaN(number)) return min;
-        return Math.min(Math.max(number, min), max);
-    }
-
     /**
      * Exibe uma mensagem na própria interface. Substitui o uso de alert(),
      * que bloqueia a janela e não é anunciado por leitores de tela.
@@ -92,20 +76,9 @@
     // Persistência
     // =====================================================================
 
-    async function loadState() {
-        try {
-            const result = await chrome.storage.local.get(STORAGE_KEY);
-            return { ...DEFAULT_STATE, ...(result[STORAGE_KEY] || {}) };
-        } catch (error) {
-            console.error('[HoverVoice] Falha ao carregar as preferências:', error);
-            showMessage('Não foi possível carregar suas preferências.', 'error');
-            return { ...DEFAULT_STATE };
-        }
-    }
-
     async function saveState() {
         try {
-            await chrome.storage.local.set({ [STORAGE_KEY]: state });
+            await writeState(state);
         } catch (error) {
             console.error('[HoverVoice] Falha ao salvar as preferências:', error);
             showMessage('Não foi possível salvar suas preferências.', 'error');
@@ -219,9 +192,10 @@
 
     /** Mantém o popup sincronizado caso o estado mude pelo atalho de teclado. */
     function handleExternalStateChange(changes, areaName) {
-        if (areaName !== 'local' || !changes[STORAGE_KEY]) return;
+        const newState = stateFromChange(changes, areaName);
+        if (!newState) return;
 
-        state = { ...DEFAULT_STATE, ...(changes[STORAGE_KEY].newValue || {}) };
+        state = newState;
         render();
     }
 
@@ -242,7 +216,7 @@
     }
 
     async function init() {
-        state = await loadState();
+        state = await readState();
         render();
         attachListeners();
     }

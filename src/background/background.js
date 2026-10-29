@@ -15,50 +15,20 @@
 
 'use strict';
 
-const STORAGE_KEY = 'extensionState';
+importScripts('../shared/state.js');
 
-const DEFAULT_STATE = Object.freeze({
-    enabled: false,
-    voiceRate: 1,
-    voicePitch: 1,
-    voiceVolume: 1,
-    language: 'pt-BR',
-    pdfAutoOpen: true
-});
+const { STORAGE_KEY, DEFAULT_STATE, readState, writeState } = HoverVoice;
 
-const VIEWER_PAGE = 'viewer.html';
-
-/**
- * Lê o estado salvo, completando com os valores padrão os campos ausentes.
- * @returns {Promise<object>}
- */
-async function readState() {
-    try {
-        const result = await chrome.storage.local.get(STORAGE_KEY);
-        return { ...DEFAULT_STATE, ...(result[STORAGE_KEY] || {}) };
-    } catch (error) {
-        console.error('[HoverVoice] Falha ao ler o estado:', error);
-        return { ...DEFAULT_STATE };
-    }
-}
-
-/**
- * Grava o estado no armazenamento local.
- * @param {object} state
- * @returns {Promise<void>}
- */
-async function writeState(state) {
-    try {
-        await chrome.storage.local.set({ [STORAGE_KEY]: state });
-    } catch (error) {
-        console.error('[HoverVoice] Falha ao gravar o estado:', error);
-    }
-}
+const VIEWER_PAGE = 'src/viewer/viewer.html';
 
 /** Inverte a situação de ativação da extensão (RF-02). */
 async function toggleExtension() {
     const state = await readState();
-    await writeState({ ...state, enabled: !state.enabled });
+    try {
+        await writeState({ ...state, enabled: !state.enabled });
+    } catch (error) {
+        console.error('[HoverVoice] Falha ao gravar o estado:', error);
+    }
 }
 
 // --- Leitor de PDF -----------------------------------------------------
@@ -144,7 +114,9 @@ async function openViewerForActiveTab() {
 chrome.runtime.onInstalled.addListener(async () => {
     const result = await chrome.storage.local.get(STORAGE_KEY);
     if (!result[STORAGE_KEY]) {
-        await writeState({ ...DEFAULT_STATE });
+        await writeState({ ...DEFAULT_STATE }).catch((error) => {
+            console.error('[HoverVoice] Falha ao gravar o estado:', error);
+        });
     }
 });
 

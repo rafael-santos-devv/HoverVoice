@@ -16,23 +16,18 @@
  *      libera as páginas distantes para não esgotar a memória.
  */
 
-import * as pdfjsLib from './lib/pdf.min.mjs';
+import * as pdfjsLib from '../../lib/pdf.min.mjs';
 import { buildBlocks } from './pdf-blocks.js';
 
 // =========================================================================
 // Constantes
 // =========================================================================
 
-const STORAGE_KEY = 'extensionState';
-
-const DEFAULT_STATE = Object.freeze({
-    enabled: false,
-    voiceRate: 1,
-    voicePitch: 1,
-    voiceVolume: 1,
-    language: 'pt-BR',
-    pdfAutoOpen: true
-});
+// HoverVoice (src/shared/state.js) é carregado por <script> comum antes deste módulo.
+const {
+    DEFAULT_STATE, RATE_RANGE, PITCH_RANGE, VOLUME_RANGE,
+    clamp, readState, writeState, stateFromChange
+} = HoverVoice;
 
 const ZOOM_STORAGE_KEY = 'hovervoice.pdfZoom';
 const ZOOM_RANGE = { min: 0.5, max: 3 };
@@ -99,10 +94,6 @@ let loadId = 0;                // Invalida carregamentos antigos quando se abre 
 // Utilitários
 // =========================================================================
 
-function clamp(value, { min, max }) {
-    return Math.min(Math.max(value, min), max);
-}
-
 /**
  * Escolhe o título exibido. Muitos PDFs trazem no metadado um texto sem valor
  * ("(anonymous)", "Microsoft Word - arquivo.docx"); nesses casos vale mais o
@@ -152,9 +143,9 @@ function speakNotice(text) {
         window.speechSynthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = state.language;
-        utterance.rate = clamp(Number(state.voiceRate) || 1, { min: 0.5, max: 2 });
-        utterance.pitch = clamp(Number(state.voicePitch) || 1, { min: 0.5, max: 2 });
-        utterance.volume = clamp(Number(state.voiceVolume) || 1, { min: 0, max: 1 });
+        utterance.rate = clamp(state.voiceRate, RATE_RANGE);
+        utterance.pitch = clamp(state.voicePitch, PITCH_RANGE);
+        utterance.volume = clamp(state.voiceVolume, VOLUME_RANGE);
         window.speechSynthesis.speak(utterance);
     } catch (error) {
         console.error('[HoverVoice] Sintetizador indisponível:', error);
@@ -667,16 +658,6 @@ function openInBrowserViewer() {
 // Estado compartilhado com o popup e o content.js
 // =========================================================================
 
-async function loadState() {
-    try {
-        const result = await chrome.storage.local.get(STORAGE_KEY);
-        return { ...DEFAULT_STATE, ...(result[STORAGE_KEY] || {}) };
-    } catch (error) {
-        console.error('[HoverVoice] Falha ao carregar o estado:', error);
-        return { ...DEFAULT_STATE };
-    }
-}
-
 function renderNarrationButton() {
     ui.narracao.setAttribute('aria-pressed', String(state.enabled));
     ui.narracaoTexto.textContent = state.enabled ? 'Narração ligada' : 'Narração desligada';
@@ -685,7 +666,7 @@ function renderNarrationButton() {
 
 async function toggleNarration() {
     try {
-        await chrome.storage.local.set({ [STORAGE_KEY]: { ...state, enabled: !state.enabled } });
+        await writeState({ ...state, enabled: !state.enabled });
     } catch (error) {
         console.error('[HoverVoice] Falha ao gravar o estado:', error);
         showMessage('Não foi possível alterar a narração.', 'erro');
@@ -693,8 +674,9 @@ async function toggleNarration() {
 }
 
 function handleStateChange(changes, areaName) {
-    if (areaName !== 'local' || !changes[STORAGE_KEY]) return;
-    state = { ...DEFAULT_STATE, ...(changes[STORAGE_KEY].newValue || {}) };
+    const newState = stateFromChange(changes, areaName);
+    if (!newState) return;
+    state = newState;
     renderNarrationButton();
 }
 
@@ -756,7 +738,7 @@ function attachListeners() {
 }
 
 async function init() {
-    state = await loadState();
+    state = await readState();
     renderNarrationButton();
     attachListeners();
 
