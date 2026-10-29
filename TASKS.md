@@ -13,14 +13,7 @@ Valem para **cada** tarefa deste quadro. Antes de começar e ao terminar, confir
 
 ## Em andamento
 
-### 3. Nova UI do popup, moderna e com animações
-- [x] Levantar a identidade atual (variáveis `--cor-*` em `popup.css`; tema escuro azul, `#00A8E8`) e propor a direção visual no Figma antes de codar.
-- [x] Usar `imskyleen/animate-ui` como referência de animações e reproduzi-las em CSS/JS puro (sem React). Se algum efeito não tiver equivalente nativo, adaptar até o resultado visual ficar igual.
-- [x] Animações respeitam `prefers-reduced-motion`; contraste e foco visível preservados (público com baixa visão).
-- [ ] Aplicar o mesmo visual ao leitor de PDF (`viewer.html/css`) para manter coerência.
-
-Status: popup aplicado e validado; falta o leitor de PDF (`viewer.html/css`).
-
+_(nenhuma)_
 
 ## A fazer
 
@@ -40,13 +33,24 @@ Usuários que criarem login poderão salvar suas preferências de voz (velocidad
 - [ ] Testar: cadastro, login, logout, token expirado, backend fora do ar, sem internet.
 
 ### 5. Atualizar documentação e Markdowns (por último)
-Fica por último para refletir o código já refatorado. Itens já encontrados desatualizados:
+Fica por último (depois da Tarefa 6) para refletir o código já refatorado. Itens já encontrados desatualizados:
 - [ ] `config.json`: versão `1.0.0` (manifest está em `1.2.0`); `file-structure` cita `images/icon128.svg` e omite `background.js`, `viewer.*`, `pdf-blocks.js`, `lib/`; `permissions` lista `scripting`, mas o manifest usa `storage`, `activeTab`, `webRequest` e `<all_urls>`; não menciona `Alt+P` nem o leitor de PDF.
 - [ ] `README.md`: em "Limitações conhecidas" diz que não lê PDFs, mas a própria seção "Leitura de PDFs" descreve o leitor; diz que `DEFAULT_STATE` está em três arquivos (são quatro); a estrutura de pastas não lista `docs/`, `exemplos/` e `INSTALACAO.html`; a tabela "DOC-01 a DOC-04" não bate com os PDFs de `docs/`.
 - [ ] `RESUMO.md`: versão `1.0.0`; ícone SVG (hoje são PNG); afirma usar `MutationObserver` (o README diz que não usa); lista "Suporte a PDF" como futuro; lista só 5 arquivos principais.
 - [ ] `INICIO_RAPIDO.md` e `CHECKLIST.md`: versão `1.0.0`, ícone SVG e nenhum item sobre PDF ou `Alt+P`.
 - [ ] Ainda **não verificados**: `INSTALACAO.html`, `TESTE.html` e os dois PDFs em `docs/`. Conferir e corrigir.
 - [ ] Atualizar também tudo que as tarefas 1 a 4 mudarem (estrutura, login, UI) e revisar se os cinco Markdowns não repetem o mesmo conteúdo; consolidar se fizer sentido.
+
+### 6. Suporte a outros idiomas (inglês e espanhol)
+Hoje o produto é só em português (pt-BR). Permitir usar a extensão em inglês e espanhol, tanto na interface quanto na voz.
+- [ ] **Definir antes de começar (perguntar ao dono):** o idioma da interface acompanha o do navegador ou é escolhido no popup? A voz de narração muda junto com a interface ou acompanha o idioma de cada página (`lang`)?
+- [ ] Escolher a estratégia de textos: `chrome.i18n` (`_locales/pt_BR`, `en`, `es` + `messages.json`) ou um dicionário próprio em `src/shared/`. Decidir e documentar no `CLAUDE.md`, mantendo o projeto sem build.
+- [ ] Extrair todo texto visível e falado (popup, leitor de PDF, avisos, anúncios `aria-live`, nome e descrição no `manifest.json`) para os arquivos de tradução.
+- [ ] Ligar o idioma da voz ao campo `language` do `extensionState` (hoje fixo em `pt-BR`), com opções `pt-BR`, `en-US` e `es-ES`, e escolher a voz instalada que corresponda.
+- [ ] Seletor de idioma no popup, seguindo o visual novo (desenhar no Figma e aguardar aprovação antes de codar).
+- [ ] Revisar o agrupamento de parágrafos em `pdf-blocks.js` para PDFs em inglês e espanhol (hifenização, pontuação como ¿ e ¡).
+- [ ] Testar nos três idiomas: popup, leitor de PDF, narração em `TESTE.html` e `Alt+A`/`Alt+P`.
+- [ ] Atualizar a documentação (Tarefa 5) com o suporte a idiomas.
 
 ## Concluído ✅
 
@@ -62,3 +66,9 @@ Organizar o código para que novas features entrem sem mexer em vários arquivos
 - [x] Quebrar funções longas (`viewer.js` tem ~770 linhas e `content.js` ~370) em funções pequenas com nomes claros.
 - [x] Remover código morto e duplicação; padronizar nomes e o estilo de tratamento de erros.
 - [x] Garantir que o comportamento não mudou (checklist de validação do `CLAUDE.md`, incluindo os PDFs de `exemplos/`).
+
+### ✅ 3. Nova UI do popup, moderna e com animações
+- [x] Levantar a identidade atual (variáveis `--cor-*` em `popup.css`; tema escuro azul, `#00A8E8`) e propor a direção visual no Figma antes de codar.
+- [x] Usar `imskyleen/animate-ui` como referência de animações e reproduzi-las em CSS/JS puro (sem React). Se algum efeito não tiver equivalente nativo, adaptar até o resultado visual ficar igual.
+- [x] Animações respeitam `prefers-reduced-motion`; contraste e foco visível preservados (público com baixa visão).
+- [x] Aplicar o mesmo visual ao leitor de PDF (`viewer.html/css`) para manter coerência.
