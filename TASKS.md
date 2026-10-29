@@ -21,12 +21,9 @@ Inclua no .gitignore os .md, menos o README.md
 
 ### 4. Tela de login e preferências salvas
 Usuários que criarem login poderão salvar suas preferências de voz (velocidade, tom, volume e demais ajustes) e recuperá-las em outro navegador.
-- [ ] **Definir antes de começar (perguntar ao dono):**
-  - tecnologia do backend (linguagem, banco de dados, hospedagem);
-  - tipo de autenticação (e-mail e senha, login social, token JWT ou sessão);
-  - o que significa "intensidade" nas preferências (hoje existem velocidade, tom e volume);
-  - ações da tela: criar conta, entrar, sair, recuperar senha.
-- [ ] Desenhar a tela de login no Figma (arquivo do `CLAUDE.md`), incluindo estados de erro, carregando e sucesso. **Aguardar aprovação do design.**
+- [x] **Decisões do dono:** login e registro são **opcionais** e **minimalistas**; autenticação **só com Google** (entrar e criar conta são o mesmo fluxo); as preferências sincronizadas são velocidade, tom e volume (não existe "intensidade"). Sem e-mail/senha, logo sem "recuperar senha".
+- [ ] **Ainda em aberto (perguntar ao dono):** tecnologia do backend (linguagem, banco, hospedagem) e o Client ID do Google (projeto no Google Cloud).
+- [x] Desenhar a tela de login no Figma (seção "Login com Google · proposta", nó `51:12`): convite, entrada, carregando, erro e logado. **Aguardando aprovação do design.**
 - [ ] Contrato da API do backend (rotas de cadastro, login e leitura/gravação de preferências) documentado antes de implementar.
 - [ ] Implementar a tela no popup, guardando só o token em `chrome.storage.local` e usando HTTPS. Atualizar `host_permissions` somente para o domínio do backend, se possível.
 - [ ] Sincronizar as preferências com o backend sem quebrar o uso offline/sem login.
