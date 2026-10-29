@@ -1,7 +1,7 @@
 /* =====================================================================
    HoverVoice — Estilos do leitor de PDF
    ---------------------------------------------------------------------
-   Reaproveita a identidade visual do popup (azul-marinho e ciano).
+   Mesma identidade visual do popup (tokens --cor-* equivalentes).
    Organização:
      1. Variáveis e base
      2. Acessibilidade
@@ -16,20 +16,22 @@
    --------------------------------------------------------------------- */
 
 :root {
-    --cor-primaria: #00A8E8;
-    --cor-primaria-clara: #00c8ff;
-    --cor-primaria-escura: #0088cc;
-    --cor-fundo-inicio: #0a1e2e;
-    --cor-fundo-fim: #16213e;
-    --cor-superficie: rgba(15, 35, 65, 0.92);
-    --cor-borda: rgba(0, 168, 232, 0.3);
-    --cor-texto: #e0e0e0;
-    --cor-texto-suave: #9cc9e6;
-    --cor-erro: #ff8a80;
+    --cor-fundo: #06111c;
+    --cor-fundo-barra: #0b1d2e;
+    --cor-superficie: #0f2740;
+    --cor-superficie-alta: #143453;
+    --cor-borda: #24557d;
+    --cor-primaria: #00a8e8;
+    --cor-primaria-clara: #5ad6ff;
+    --cor-texto: #f3f9fd;
+    --cor-texto-suave: #a9cde3;
+    --cor-erro: #ff9d94;
     --cor-aviso: #ffd180;
 
-    --raio-borda: 12px;
-    --raio-borda-pequeno: 8px;
+    --raio-borda: 16px;
+    --raio-borda-pequeno: 12px;
+    --duracao: 200ms;
+    --curva: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 * {
@@ -44,10 +46,8 @@ html {
 
 body {
     min-height: 100vh;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-                 Ubuntu, Cantarell, sans-serif;
-    background: linear-gradient(135deg, var(--cor-fundo-inicio) 0%, var(--cor-fundo-fim) 100%);
-    background-attachment: fixed;
+    font-family: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+    background: var(--cor-fundo);
     color: var(--cor-texto);
 }
 
@@ -85,7 +85,7 @@ input:focus-visible,
 }
 
 @media (prefers-reduced-motion: reduce) {
-    * {
+    *, *::before, *::after {
         transition: none !important;
         animation: none !important;
     }
@@ -105,7 +105,7 @@ input:focus-visible,
     justify-content: space-between;
     gap: 12px 24px;
     padding: 12px 24px;
-    background: var(--cor-superficie);
+    background: var(--cor-fundo-barra);
     border-bottom: 1px solid var(--cor-borda);
     backdrop-filter: blur(8px);
 }
@@ -115,6 +115,17 @@ input:focus-visible,
     align-items: center;
     gap: 12px;
     min-width: 0;
+}
+
+.logo {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: var(--cor-primaria);
+    color: var(--cor-fundo);
 }
 
 .barra-titulos {
@@ -152,17 +163,17 @@ input:focus-visible,
     padding: 8px 14px;
     border: 1px solid var(--cor-borda);
     border-radius: var(--raio-borda-pequeno);
-    background: rgba(0, 168, 232, 0.1);
+    background: var(--cor-superficie);
     color: var(--cor-texto);
     font: inherit;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.2s, border-color 0.2s;
+    transition: background-color var(--duracao), border-color var(--duracao), transform var(--duracao) var(--curva);
 }
 
 .botao:hover:not(:disabled) {
-    background: rgba(0, 168, 232, 0.22);
+    background: var(--cor-superficie-alta);
     border-color: var(--cor-primaria);
 }
 
@@ -179,19 +190,26 @@ input:focus-visible,
 }
 
 .botao-destaque {
-    border: none;
-    background: linear-gradient(135deg, var(--cor-primaria) 0%, var(--cor-primaria-escura) 100%);
-    color: #ffffff;
+    border-color: transparent;
+    background: var(--cor-primaria);
+    color: var(--cor-fundo);
+    font-weight: 700;
 }
 
 .botao-destaque:hover:not(:disabled) {
-    background: linear-gradient(135deg, var(--cor-primaria-clara) 0%, var(--cor-primaria) 100%);
+    background: var(--cor-primaria-clara);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 168, 232, 0.35);
+}
+
+.botao-destaque:active:not(:disabled) {
+    transform: translateY(0);
 }
 
 .botao-narracao[aria-pressed="true"] {
-    border-color: var(--cor-primaria-clara);
-    background: rgba(0, 168, 232, 0.32);
-    color: #ffffff;
+    border-color: var(--cor-primaria);
+    background: #0b3552;
+    color: var(--cor-texto);
 }
 
 .grupo-zoom {
@@ -217,7 +235,7 @@ input:focus-visible,
     padding: 10px 14px;
     border: 1px solid var(--cor-borda);
     border-radius: var(--raio-borda-pequeno);
-    background: rgba(0, 168, 232, 0.1);
+    background: var(--cor-superficie);
     color: var(--cor-texto-suave);
     font-size: 14px;
 }
@@ -235,6 +253,7 @@ input:focus-visible,
 }
 
 .painel {
+    animation: entrada 400ms var(--curva) backwards;
     max-width: 560px;
     margin: 12vh auto 0;
     padding: 32px;
@@ -279,16 +298,20 @@ input:focus-visible,
 .formulario-senha input {
     max-width: 320px;
     padding: 10px 12px;
-    border: 1px solid rgba(0, 168, 232, 0.35);
+    border: 1px solid var(--cor-borda);
     border-radius: var(--raio-borda-pequeno);
-    background: rgba(10, 30, 46, 0.7);
+    background: var(--cor-fundo);
     color: var(--cor-texto);
     font: inherit;
 }
 
 .painel[data-arrastando="true"] {
     border-color: var(--cor-primaria-clara);
-    background: rgba(0, 168, 232, 0.16);
+    background: var(--cor-superficie-alta);
+}
+
+@keyframes entrada {
+    from { opacity: 0; transform: translateY(8px); }
 }
 
 /* ---------------------------------------------------------------------
