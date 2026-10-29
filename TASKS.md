@@ -19,14 +19,6 @@ _(nenhuma)_
 
 Inclua no .gitignore os .md, menos o README.md
 
-### 1. Arquitetura fácil de evoluir
-Organizar o código para que novas features entrem sem mexer em vários arquivos e para que um novo dev entenda a aplicação inteira lendo pouco.
-- [x] Extrair o que hoje está duplicado em `background.js`, `content.js`, `popup.js` e `viewer.js` (`DEFAULT_STATE`, `STORAGE_KEY`, `clamp`, leitura/gravação do estado) para um único módulo compartilhado.
-- [x] Resolver a restrição de que `content.js` não aceita `import`: decidir e documentar como compartilhar esse código (ex.: script carregado antes no `manifest.json`).
-- [x] Definir a estrutura de pastas (ex.: `src/` com `background`, `content`, `popup`, `viewer`, `shared`), mantendo o projeto carregável sem build.
-- [ ] Reduzir comentários aos essenciais (o porquê, não o quê). Manter as referências `RF-xx` / `RN-xx`.
-- [x] Atualizar `manifest.json`, o `CLAUDE.md` e o mapa de arquivos depois de mover qualquer coisa.
-
 ### 2. Refatoração e legibilidade
 - [ ] Quebrar funções longas (`viewer.js` tem ~770 linhas e `content.js` ~370) em funções pequenas com nomes claros.
 - [ ] Remover código morto e duplicação; padronizar nomes e o estilo de tratamento de erros.
@@ -62,4 +54,11 @@ Fica por último para refletir o código já refatorado. Itens já encontrados d
 
 ## Concluído ✅
 
-_(nenhuma)_
+### ✅ 1. Arquitetura fácil de evoluir
+Organizar o código para que novas features entrem sem mexer em vários arquivos e para que um novo dev entenda a aplicação inteira lendo pouco.
+- [x] Extrair o que hoje está duplicado em `background.js`, `content.js`, `popup.js` e `viewer.js` (`DEFAULT_STATE`, `STORAGE_KEY`, `clamp`, leitura/gravação do estado) para um único módulo compartilhado.
+- [x] Resolver a restrição de que `content.js` não aceita `import`: decidir e documentar como compartilhar esse código (ex.: script carregado antes no `manifest.json`).
+- [x] Definir a estrutura de pastas (ex.: `src/` com `background`, `content`, `popup`, `viewer`, `shared`), mantendo o projeto carregável sem build.
+- [x] Reduzir comentários aos essenciais (o porquê, não o quê). Manter as referências `RF-xx` / `RN-xx`.
+- [x] Atualizar `manifest.json`, o `CLAUDE.md` e o mapa de arquivos depois de mover qualquer coisa.
+
