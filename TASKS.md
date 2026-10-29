@@ -13,17 +13,18 @@ Valem para **cada** tarefa deste quadro. Antes de começar e ao terminar, confir
 
 ## Em andamento
 
-_(nenhuma)_
+### 3. Nova UI do popup, moderna e com animações
+- [x] Levantar a identidade atual (variáveis `--cor-*` em `popup.css`; tema escuro azul, `#00A8E8`) e propor a direção visual no Figma antes de codar.
+- [x] Usar `imskyleen/animate-ui` como referência de animações e reproduzi-las em CSS/JS puro (sem React). Se algum efeito não tiver equivalente nativo, adaptar até o resultado visual ficar igual.
+- [x] Animações respeitam `prefers-reduced-motion`; contraste e foco visível preservados (público com baixa visão).
+- [ ] Aplicar o mesmo visual ao leitor de PDF (`viewer.html/css`) para manter coerência.
+
+Status: popup aplicado e validado; falta o leitor de PDF (`viewer.html/css`).
+
 
 ## A fazer
 
 Inclua no .gitignore os .md, menos o README.md
-
-### 3. Nova UI do popup, moderna e com animações
-- [ ] Levantar a identidade atual (variáveis `--cor-*` em `popup.css`; tema escuro azul, `#00A8E8`) e propor a direção visual no Figma antes de codar.
-- [ ] Usar `imskyleen/animate-ui` como referência de animações e reproduzi-las em CSS/JS puro (sem React). Se algum efeito não tiver equivalente nativo, adaptar até o resultado visual ficar igual.
-- [ ] Animações respeitam `prefers-reduced-motion`; contraste e foco visível preservados (público com baixa visão).
-- [ ] Aplicar o mesmo visual ao leitor de PDF (`viewer.html/css`) para manter coerência.
 
 ### 4. Tela de login e preferências salvas
 Usuários que criarem login poderão salvar suas preferências de voz (velocidade, tom, volume e demais ajustes) e recuperá-las em outro navegador.
