@@ -259,11 +259,11 @@ O texto é normalizado (espaços colapsados) e limitado a 500 caracteres.
 
 | Documento | Conteúdo |
 |---|---|
-| `docs/HoverVoice-Documentacao-do-Software.pdf` | Visão geral, requisitos, arquitetura, instalação e evolução planejada |
-| `docs/HoverVoice-Documento-de-Qualidade.pdf` | Estratégia de testes, casos de teste e rastreabilidade |
+| `docs/atualizados/HoverVoice-Documentacao-do-Software` (`.docx` e `.pdf`) | Visão geral, requisitos, arquitetura, instalação, login e idiomas (v1.2.0) |
+| `docs/atualizados/HoverVoice-Documento-de-Qualidade` (`.docx` e `.pdf`) | Estratégia de testes, casos de teste, rastreabilidade e registro de execução (v1.2.0) |
 | `docs/api-contrato.md` | Contrato da API de login e preferências |
 
-Os documentos de gestão (controle de projeto, negócios e requisitos/Product Backlog) são mantidos pela equipe fora deste repositório.
+O `.docx` é a versão editável; o `.pdf` é gerado a partir do mesmo conteúdo. Os documentos de gestão (controle de projeto, negócios e requisitos/Product Backlog) são mantidos pela equipe fora deste repositório.
 
 ---
 

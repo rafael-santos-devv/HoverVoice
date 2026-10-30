@@ -23,19 +23,6 @@ Usuários que criarem login poderão salvar suas preferências de voz (velocidad
 - [x] Sincronizar as preferências com o backend sem quebrar o uso offline/sem login.
 - [ ] Testar com o Google de verdade (login, logout, token expirado). Já testados com o Google simulado: login, logout, sincronização, sem Client ID e backend fora do ar.
 
-### 5. Atualizar documentação e Markdowns (por último)
-Reflete o código já refatorado, com login e idiomas.
-- [x] `config.json`: versão 1.2.0, estrutura em `src/`, permissões reais, `Alt+P`, leitor de PDF, idiomas, conta e vozes.
-- [x] `README.md`: reescrito (instalação, uso, idiomas e vozes, conta com Google, leitor de PDF, estrutura, arquitetura, permissões, limitações e solução de problemas atualizados).
-- [x] `RESUMO.md` e `INICIO_RAPIDO.md`: removidos. Repetiam o README com dados vencidos (v1.0.0, ícone SVG, `MutationObserver`, PDF como "futuro"); o início rápido agora está no README. Continuam no histórico do git.
-- [x] `CHECKLIST.md`: refeito como roteiro de verificação da v1.2.0 (inclui PDF, idiomas, vozes e conta).
-- [x] `INSTALACAO.html` e `TESTE.html`: versão 1.2.0, `Alt+P`, idiomas, PDF e conta; `TESTE.html` ganhou parágrafos `lang="en"`, `lang="es"` e `lang="pt-BR"` para testar a voz automática; botões mortos de "Reportar problema" viraram links para as issues do GitHub.
-- [ ] **Pendente (equipe):** os dois PDFs de `docs/` não podem ser editados por aqui. Pontos a corrigir:
-  - **Documentação do Software:** README "1.1.0" (já é 1.2.0); estrutura de arquivos na raiz (agora em `src/`) e menção a `INICIO_RAPIDO.md` e `RESUMO.md` (removidos); permissões sem `identity`; RN-01 e tabela de configuração padrão (`Idioma pt-BR` virou `uiLanguage`, `voiceLanguage` e `voices`); telas e estados do popup (visual novo, seletores de idioma, conta); seção 9 inteira: o login implementado é **só com Google**, opcional, **sem e-mail/senha nem recuperação de senha**, sincroniza só velocidade, tom e volume, não tem "intensidade", o módulo está em `src/shared/auth.js` (usado pelo popup, não pelo `background.js`) e as perguntas em aberto estão respondidas (Google; backend próprio em Node.js + SQLite); em conflito vale a conta ao abrir o popup.
-  - **Documento de Qualidade:** RF-L01 a RNF-L03 e a seção 6 (e-mail e senha); CT-16 (idioma pt-BR); faltam casos para idiomas, escolha de voz e PDF em outros idiomas; o contraste (CT-24) ainda não foi medido.
-  - Os IDs `RF/RN/RNF` seguem provisórios até a conferência com o DOC-04.
-  - Posso redigir o texto atualizado dessas seções para a equipe colar nos documentos de origem.
-
 ## A fazer
 
 _(nenhuma)_
@@ -74,3 +61,12 @@ Hoje o produto é só em português (pt-BR). Permitir usar a extensão em inglê
 - [x] Revisar o agrupamento de parágrafos em `pdf-blocks.js` para PDFs em inglês e espanhol: o fim de frase (`.!?…`) e a hifenização (letras acentuadas e ñ) já cobrem os dois idiomas; sem mudança. Não testado com PDFs reais em inglês/espanhol (só há exemplos em português).
 - [x] Testar nos três idiomas (popup, leitor de PDF, `TESTE.html`), no Chrome por script. Não testado: voz real em espanhol (sem voz instalada na máquina de teste) e os atalhos `Alt+A`/`Alt+P`.
 - [x] Atualizar a documentação (Tarefa 5) com o suporte a idiomas.
+
+### ✅ 5. Atualizar documentação e Markdowns 
+Reflete o código já refatorado, com login e idiomas.
+- [x] `config.json`: versão 1.2.0, estrutura em `src/`, permissões reais, `Alt+P`, leitor de PDF, idiomas, conta e vozes.
+- [x] `README.md`: reescrito (instalação, uso, idiomas e vozes, conta com Google, leitor de PDF, estrutura, arquitetura, permissões, limitações e solução de problemas atualizados).
+- [x] `RESUMO.md` e `INICIO_RAPIDO.md`: removidos. Repetiam o README com dados vencidos (v1.0.0, ícone SVG, `MutationObserver`, PDF como "futuro"); o início rápido agora está no README. Continuam no histórico do git.
+- [x] `CHECKLIST.md`: refeito como roteiro de verificação da v1.2.0 (inclui PDF, idiomas, vozes e conta).
+- [x] `INSTALACAO.html` e `TESTE.html`: versão 1.2.0, `Alt+P`, idiomas, PDF e conta; `TESTE.html` ganhou parágrafos `lang="en"`, `lang="es"` e `lang="pt-BR"` para testar a voz automática; botões mortos de "Reportar problema" viraram links para as issues do GitHub.
+- [x] Documentação do Software e Documento de Qualidade reescritos para a v1.2.0 em `docs/atualizados/` (`.docx` editável e `.pdf` de cada um). Os PDFs originais de `docs/` ficam como estavam. Pontos para a equipe conferir: IDs RF/RN/RNF novos (RF-11 a RF-17, RN-05 a RN-07, RNF-06 e RNF-07) continuam provisórios até o DOC-04; o ciclo 1 de testes foi por script (sem ouvir o áudio) e o contraste (CT-24) ainda precisa ser medido.
