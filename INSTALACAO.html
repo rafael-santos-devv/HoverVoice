@@ -249,11 +249,23 @@
                 </div>
                 <div class="feature-card">
                     <h4>⌨️ Atalhos de Teclado</h4>
-                    <p>Alt+A para ativar/desativar. Tab para navegar entre elementos.</p>
+                    <p>Alt+A para ativar/desativar. Alt+P para abrir um PDF no leitor. Tab para navegar entre elementos.</p>
                 </div>
                 <div class="feature-card">
-                    <h4>🎚️ Configurações Avançadas</h4>
-                    <p>Ajuste velocidade, tom e volume da voz conforme sua preferência.</p>
+                    <h4>🎚️ Configurações de Voz</h4>
+                    <p>Ajuste velocidade, tom e volume e escolha a voz entre as instaladas no seu sistema.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🌐 Três Idiomas</h4>
+                    <p>Interface e voz em português, inglês e espanhol. No modo Automático, a voz segue o idioma de cada página.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📄 Leitor de PDF</h4>
+                    <p>PDFs abrem em um leitor próprio, onde cada parágrafo é narrado ao passar o mouse.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>☁️ Conta Opcional</h4>
+                    <p>Entre com o Google para levar velocidade, tom e volume para outro navegador. Sem conta, tudo funciona normalmente.</p>
                 </div>
                 <div class="feature-card">
                     <h4>📝 Testar Voz</h4>
@@ -281,7 +293,7 @@
             <ol class="steps">
                 <li>Clique no ícone da extensão (olho azul) na barra de ferramentas</li>
                 <li>Ative o switch <strong>"HoverVoice"</strong></li>
-                <li>Você verá a mensagem: <em>"HoverVoice Ativo - Passe o mouse para ouvir"</em></li>
+                <li>O selo no topo muda para <em>"Ativo"</em> e a extensão fala <em>"HoverVoice ativado"</em></li>
             </ol>
 
             <h3>2. Usar na Página</h3>
@@ -294,8 +306,9 @@
             <h3>3. Configurar a Voz</h3>
             <ol class="steps">
                 <li>Abra o popup da extensão</li>
-                <li>Clique em <strong>"Configurações de Voz"</strong></li>
-                <li>Ajuste os controles de velocidade, tom e volume</li>
+                <li>Clique em <strong>"Configurações de voz"</strong></li>
+                <li>Ajuste idioma da voz, voz, velocidade, tom e volume</li>
+                <li>O <strong>idioma da interface</strong> (PT · EN · ES) fica na base do popup</li>
                 <li>As mudanças são salvas automaticamente</li>
             </ol>
 
@@ -326,6 +339,10 @@
                     <td style="padding: 12px;"><code class="code-block" style="padding: 4px 8px;">Tab</code></td>
                     <td style="padding: 12px;">Navega para o próximo elemento</td>
                 </tr>
+                <tr style="border-bottom: 1px solid rgba(0, 168, 232, 0.2);">
+                    <td style="padding: 12px;"><code class="code-block" style="padding: 4px 8px;">Alt + P</code></td>
+                    <td style="padding: 12px;">Abre o PDF da aba atual no leitor do HoverVoice</td>
+                </tr>
                 <tr>
                     <td style="padding: 12px;"><code class="code-block" style="padding: 4px 8px;">Shift + Tab</code></td>
                     <td style="padding: 12px;">Navega para o elemento anterior</td>
@@ -339,7 +356,7 @@
                 <span>📋</span>
                 Elementos Narrados
             </h2>
-            <p>O HoverVoice narração os seguintes tipos de conteúdo:</p>
+            <p>O HoverVoice narra os seguintes tipos de conteúdo:</p>
             <ul style="list-style: none; padding-left: 20px;">
                 <li style="margin-bottom: 8px;">✓ Texto de parágrafos</li>
                 <li style="margin-bottom: 8px;">✓ Títulos e subtítulos</li>
@@ -391,7 +408,7 @@
             </div>
 
             <div class="warning">
-                ⚠️ <strong>Nota:</strong> Alguns navegadores podem ter suporte limitado a idiomas ou síntese de voz. Certifique-se de que seu navegador suporta o Português Brasileiro.
+                ⚠️ <strong>Nota:</strong> Alguns navegadores podem ter suporte limitado a idiomas ou síntese de voz. A lista de vozes depende do sistema operacional: para ouvir em inglês ou espanhol, instale a voz do idioma nas configurações de voz do sistema. O HoverVoice não traduz o conteúdo das páginas.
             </div>
         </div>
 
@@ -439,15 +456,15 @@
                 Precisa de Ajuda?
             </h2>
             <p style="margin-bottom: 20px;">Se encontrou algum problema não listado acima ou deseja sugerir uma nova funcionalidade:</p>
-            <button class="button">Reportar um Problema</button>
-            <button class="button" style="margin-left: 10px;">Sugerir Melhoria</button>
+            <a class="button" style="text-decoration: none; display: inline-block;" href="https://github.com/rafael-santos-devv/HoverVoice/issues/new">Reportar um Problema</a>
+            <a class="button" style="margin-left: 10px; text-decoration: none; display: inline-block;" href="https://github.com/rafael-santos-devv/HoverVoice/issues/new">Sugerir Melhoria</a>
         </div>
 
         <!-- Footer -->
         <div class="footer">
-            <p><strong>HoverVoice</strong> v1.0.0</p>
+            <p><strong>HoverVoice</strong> v1.2.0</p>
             <p>Projeto Educacional - Senai</p>
-            <p>Idioma: Português (Brasil)</p>
+            <p>Idiomas: Português, English, Español</p>
             <p style="margin-top: 10px; font-size: 12px;">© 2026 - Todos os direitos reservados</p>
         </div>
     </div>
