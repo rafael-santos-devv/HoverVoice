@@ -55,7 +55,7 @@ Roteiro manual para conferir a extensão antes de uma entrega. Marque cada item 
 
 Só com o backend no ar e o Client ID configurado (`docs/api-contrato.md`).
 
-- [ ] Com `GOOGLE_CLIENT_ID` vazio (estado atual), o cartão de conta **não aparece** e todo o resto funciona
+- [ ] **Modo demonstração** (`GOOGLE_CLIENT_ID` vazio, estado atual): o cartão de conta mostra a etiqueta "Demonstração"; **Entrar** simula o login, mostra `demo@hovervoice.dev`, e as preferências voltam ao entrar de novo depois de sair; nenhuma requisição de rede é feita
 - [ ] Sem conta, tudo funciona como antes, e **Agora não** volta ao popup
 - [ ] **Entrar** abre o login do Google; depois mostra o e-mail e "Preferências sincronizadas"
 - [ ] Mudar a velocidade e soltar o controle grava na conta; em outro navegador, entrar traz o mesmo valor

@@ -1,6 +1,6 @@
 # Contrato da API (login com Google e preferências)
 
-> **Estado:** o login está implementado e testado com o Google simulado, mas **desativado por padrão**: com `GOOGLE_CLIENT_ID` vazio em `src/shared/auth.js`, o popup esconde o cartão de conta. Basta preencher o Client ID (passos em "Configuração") para ativá-lo.
+> **Estado:** o login real está implementado e testado com o Google simulado, mas rodando em **modo demonstração**: com `GOOGLE_CLIENT_ID` vazio em `src/shared/auth.js`, o popup simula o login localmente (conta fictícia, sem rede, etiqueta "Demonstração"). Basta preencher o Client ID (passos em "Configuração") para o login real assumir.
 
 Backend em Node.js + SQLite, em repositório separado: https://github.com/MadureiraHenrique/HoverVoice-backend (privado). Todas as rotas falam JSON. Fora de `localhost`, só HTTPS.
 
