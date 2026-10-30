@@ -17,14 +17,14 @@ Valem para **cada** tarefa deste quadro. Antes de começar e ao terminar, confir
 Hoje o produto é só em português (pt-BR). Permitir usar a extensão em inglês e espanhol, tanto na interface quanto na voz.
 - [x] **Decisões do dono:** seletor de idioma no popup (padrão = idioma do navegador: pt, en ou es, senão pt-BR; escolha salva); a voz acompanha o `lang` de cada página/PDF e, se faltar, o idioma da interface; textos em dicionário próprio (`src/shared/i18n.js`), sem `chrome.i18n`.
 - [x] Escolher a estratégia de textos: `chrome.i18n` (`_locales/pt_BR`, `en`, `es` + `messages.json`) ou um dicionário próprio em `src/shared/`. Decidir e documentar no `CLAUDE.md`, mantendo o projeto sem build.
-- [ ] Extrair todo texto visível e falado (popup, leitor de PDF, avisos, anúncios `aria-live`, nome e descrição no `manifest.json`) para os arquivos de tradução.
-- [ ] Seletor "Idioma da voz": **Automático** (padrão: `lang` da página/PDF e, se faltar, o da interface), PT, EN ou ES fixos (imersão). Ligar ao campo `language` do `extensionState` (hoje fixo em `pt-BR`).
-- [ ] Escolha de voz: lista de `speechSynthesis.getVoices()` filtrada pelo idioma, com "padrão do sistema"; guardar a voz escolhida por idioma. Lidar com a lista assíncrona (`voiceschanged`) e com vozes que somem.
+- [x] Extrair todo texto visível e falado (popup, leitor de PDF, avisos, anúncios `aria-live`, nome e descrição no `manifest.json`) para os arquivos de tradução.
+- [x] Seletor "Idioma da voz": **Automático** (padrão: `lang` da página/PDF e, se faltar, o da interface), PT, EN ou ES fixos (imersão). Ligar ao campo `language` do `extensionState` (hoje fixo em `pt-BR`).
+- [x] Escolha de voz: lista de `speechSynthesis.getVoices()` filtrada pelo idioma, com "padrão do sistema"; guardar a voz escolhida por idioma. Lidar com a lista assíncrona (`voiceschanged`) e com vozes que somem.
 - [ ] Ideia futura (fora desta tarefa): traduzir o conteúdo das páginas; exige serviço externo.
 - [x] Desenhar o seletor de idioma no Figma (seção "Idiomas · proposta", nó `57:12`, popup em PT, EN e ES). Inclui o popup com "Idioma da voz" e escolha de voz (nó `59:18`). **Aguardando aprovação do design antes de codar.**
-- [ ] Implementar o seletor de idioma no popup.
-- [ ] Revisar o agrupamento de parágrafos em `pdf-blocks.js` para PDFs em inglês e espanhol (hifenização, pontuação como ¿ e ¡).
-- [ ] Testar nos três idiomas: popup, leitor de PDF, narração em `TESTE.html` e `Alt+A`/`Alt+P`.
+- [x] Implementar o seletor de idioma no popup.
+- [x] Revisar o agrupamento de parágrafos em `pdf-blocks.js` para PDFs em inglês e espanhol: o fim de frase (`.!?…`) e a hifenização (letras acentuadas e ñ) já cobrem os dois idiomas; sem mudança. Não testado com PDFs reais em inglês/espanhol (só há exemplos em português).
+- [x] Testar nos três idiomas (popup, leitor de PDF, `TESTE.html`), no Chrome por script. Não testado: voz real em espanhol (sem voz instalada na máquina de teste) e os atalhos `Alt+A`/`Alt+P`.
 - [ ] Atualizar a documentação (Tarefa 5) com o suporte a idiomas.
 
 ## A fazer

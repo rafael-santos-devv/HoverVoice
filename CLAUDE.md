@@ -14,7 +14,7 @@ Extensão de navegador (Chrome/Edge, Manifest V3) de acessibilidade para pessoas
 - A extensão é carregada "sem compactação" (`chrome://extensions` → Modo de desenvolvedor → pasta do projeto). Depois de editar, recarregue a extensão e a página de teste.
 - `lib/` contém o PDF.js de terceiros. **Não edite nada em `lib/`.**
 - Permissões do `manifest.json` (`storage`, `activeTab`, `webRequest`, `identity`, `<all_urls>`): não amplie sem necessidade e documente o motivo. `identity` existe só para o login opcional com Google (`chrome.identity.launchWebAuthFlow`).
-- Todo texto visível ao usuário em português (pt-BR).
+- Todo texto visível ou falado vem de `HoverVoiceI18n.t()` (pt, en, es); o português é o idioma de referência e o de reserva. Só `manifest.json` (nome e descrição) fica em português. O content script nunca altera o `lang` de páginas de terceiros.
 
 ## Arquivos e responsabilidades
 
@@ -22,6 +22,8 @@ Extensão de navegador (Chrome/Edge, Manifest V3) de acessibilidade para pessoas
 |---|---|
 | `manifest.json` | Configuração, permissões e atalhos (`Alt+A` ativa/desativa, `Alt+P` abre PDF no leitor) |
 | `src/shared/state.js` | Script comum que publica o global `HoverVoice` (`STORAGE_KEY`, `DEFAULT_STATE`, faixas de voz, `clamp`, `readState`, `writeState`, `stateFromChange`). Carregado antes de todos os demais |
+| `src/shared/i18n.js` | Script comum que publica `HoverVoiceI18n`: textos em pt, en e es (`MESSAGES`), `t(chave, params)`, `apply()` (atributos `data-i18n` e `data-i18n-attr`). Todo texto novo entra aqui nos três idiomas |
+| `src/shared/voice.js` | Script comum que publica `HoverVoiceVoice`: idioma da fala (fixo ou `lang` da página), lista e escolha de vozes, `createUtterance`. Narração e teste de voz usam só ele |
 | `src/shared/auth.js` | Script comum que publica `HoverVoiceAuth`: login com Google, sessão (`authSession`) e sincronização das preferências de voz com o backend. Só o popup o usa. Contrato em `docs/api-contrato.md` |
 | `src/background/background.js` | Service worker: estado padrão, atalhos, detecção e redirecionamento de PDFs |
 | `src/content/content.js` | Roda em cada página (e no `viewer.html`): captura o elemento sob o cursor/foco e narra via Web Speech API |
