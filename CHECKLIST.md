@@ -67,7 +67,7 @@ Só com o backend no ar e o Client ID configurado (`docs/api-contrato.md`).
 
 - [ ] Todo o popup e o leitor funcionam só com o teclado, com foco visível em cada controle
 - [ ] Mensagens de estado são anunciadas (`role="status"`)
-- [ ] Textos e controles têm contraste mínimo de 4,5:1 (medir com uma ferramenta de contraste)
+- [ ] Textos têm contraste mínimo de 4,5:1 e controles (bordas, interruptor) de 3:1 (já calculado em 30/10/2026; conferir com uma ferramenta externa se alterar as cores)
 - [ ] Nenhum `alert()` é usado
 
 ## 8. Compatibilidade
