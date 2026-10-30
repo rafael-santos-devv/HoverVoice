@@ -468,6 +468,74 @@ body[data-tela="login"] .conteudo { display: none; }
     to { transform: translateX(185%); }
 }
 
+/* Idioma e voz */
+
+.ajuste-rotulo {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--cor-texto-suave);
+}
+
+.segmentos {
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+    border: 1px solid var(--cor-borda);
+    border-radius: 99px;
+    background: var(--cor-fundo);
+}
+
+.segmentos button {
+    flex: 1;
+    padding: 6px 14px;
+    border: 0;
+    border-radius: 99px;
+    background: transparent;
+    color: var(--cor-texto-suave);
+    font: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background var(--duracao), color var(--duracao);
+}
+
+.segmentos-largos button { padding-block: 8px; }
+
+.segmentos button[aria-pressed="true"] {
+    background: var(--cor-primaria);
+    color: var(--cor-fundo);
+}
+
+.dica {
+    margin-top: 8px;
+    font-size: 12px;
+    line-height: 1.4;
+    color: #8fb4cb;
+}
+
+select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--raio-campo);
+    background: var(--cor-fundo);
+    color: var(--cor-texto);
+    font: inherit;
+    font-size: 14px;
+}
+
+.idioma-interface {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--cor-texto-suave);
+}
+
 /* Mensagens, atalhos e rodapé */
 
 .mensagem {

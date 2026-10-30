@@ -19,6 +19,8 @@
         clamp, readState, writeState, stateFromChange
     } = HoverVoice;
     const auth = HoverVoiceAuth;
+    const i18n = HoverVoiceI18n;
+    const t = i18n.t;
 
     const MESSAGE_TIMEOUT_MS = 4000;
 
@@ -53,14 +55,11 @@
         loginProgress: document.getElementById('loginProgresso'),
         googleButton: document.getElementById('botaoGoogle'),
         googleButtonText: document.getElementById('botaoGoogleTexto'),
-        skipButton: document.getElementById('botaoSemConta')
-    };
-
-    const LOGIN_ERRORS = {
-        'not-configured': 'Login com Google ainda não configurado.',
-        network: 'Sem conexão com o servidor. Suas preferências locais continuam salvas.',
-        google: 'O Google não concluiu o login. Tente de novo.',
-        server: 'O servidor não respondeu como esperado. Tente mais tarde.'
+        skipButton: document.getElementById('botaoSemConta'),
+        voiceLanguageGroup: document.getElementById('voiceLanguageGroup'),
+        uiLanguageGroup: document.getElementById('uiLanguageGroup'),
+        voiceSelect: document.getElementById('voiceSelect'),
+        voiceHint: document.getElementById('voiceHint')
     };
 
     // =====================================================================
@@ -103,7 +102,7 @@
             await writeState(state);
         } catch (error) {
             console.error('[HoverVoice] Falha ao salvar as preferências:', error);
-            showMessage('Não foi possível salvar suas preferências.', 'error');
+            showMessage(t('message.saveFailed'), 'error');
         }
     }
 
@@ -117,9 +116,9 @@
         ui.toggle.setAttribute('aria-checked', String(enabled));
         document.body.dataset.estado = enabled ? 'ativo' : 'inativo';
 
-        ui.statusText.textContent = enabled ? 'HoverVoice ativo' : 'HoverVoice inativo';
-        ui.statusSubtext.textContent = enabled ? 'Passe o mouse ou use Tab' : 'Ative para ouvir a página';
-        ui.chipText.textContent = enabled ? 'Ativo' : 'Inativo';
+        ui.statusText.textContent = t(enabled ? 'status.titleOn' : 'status.titleOff');
+        ui.statusSubtext.textContent = t(enabled ? 'status.subOn' : 'status.subOff');
+        ui.chipText.textContent = t(enabled ? 'status.on' : 'status.off');
     }
 
     function renderPdfSettings() {
@@ -140,10 +139,52 @@
         });
     }
 
+    /** Idioma cuja voz está em uso na tela: o fixo ou, no automático, o da interface. */
+    function displayedVoiceLanguage() {
+        return i18n.normalize(state.voiceLanguage === 'auto' ? null : state.voiceLanguage) || i18n.getLanguage();
+    }
+
+    function renderSegments(group, value) {
+        group.querySelectorAll('button').forEach((button) => {
+            button.setAttribute('aria-pressed', String(button.dataset.value === value));
+        });
+    }
+
+    // Uma geração por chamada: a lista de vozes chega depois e só a mais recente vale.
+    let voiceRender = 0;
+
+    async function renderVoiceChoice() {
+        const generation = ++voiceRender;
+        const language = displayedVoiceLanguage();
+        const voices = await HoverVoiceVoice.loadVoices(language);
+        if (generation !== voiceRender) return;
+
+        const options = [new Option(t('settings.voiceDefault'), '')];
+        voices.forEach((voice) => options.push(new Option(`${voice.name} · ${voice.lang}`, voice.voiceURI)));
+        ui.voiceSelect.replaceChildren(...options);
+        ui.voiceSelect.value = voices.some((voice) => voice.voiceURI === state.voices?.[language])
+            ? state.voices[language]
+            : '';
+        ui.voiceHint.textContent = voices.length
+            ? t('settings.voiceHint', { language: t(`lang.${language}`) })
+            : t('settings.noVoices');
+    }
+
+    function renderLanguage() {
+        renderSegments(ui.uiLanguageGroup, i18n.getLanguage());
+        renderSegments(ui.voiceLanguageGroup, state.voiceLanguage);
+        renderVoiceChoice();
+    }
+
     function render() {
+        i18n.setFromState(state);
+        i18n.apply();
         renderStatus();
         renderPdfSettings();
         renderVoiceSettings();
+        renderLanguage();
+        renderAccount(currentSession);
+        if (!ui.loginScreen.hidden) showLoginScreen(loginView.estado, loginView.errorCode);
     }
 
     // =====================================================================
@@ -152,33 +193,34 @@
 
     // Invalida tentativas de login abandonadas (a janela do Google não pode ser cancelada por código).
     let loginAttempt = 0;
+    let currentSession = null;
+    let loginView = { estado: 'entrada', errorCode: '' };
 
     function renderAccount(session) {
+        currentSession = session;
         const loggedIn = Boolean(session);
         ui.accountCard.dataset.logado = String(loggedIn);
         ui.accountLoggedOut.hidden = loggedIn;
         ui.accountLoggedIn.hidden = !loggedIn;
         ui.accountEmail.textContent = session?.email || '';
-        ui.accountButton.textContent = loggedIn ? 'Sair' : 'Entrar';
+        ui.accountButton.textContent = t(loggedIn ? 'account.signOut' : 'account.signIn');
     }
 
-    /** estado: 'entrada' | 'carregando' | 'erro'. */
-    function showLoginScreen(estado, errorMessage = '') {
+    /** estado: 'entrada' | 'carregando' | 'erro' (errorCode: código de HoverVoiceAuth). */
+    function showLoginScreen(estado, errorCode = '') {
+        loginView = { estado, errorCode };
         document.body.dataset.tela = 'login';
         ui.loginScreen.hidden = false;
 
         const loading = estado === 'carregando';
-        ui.loginTitle.textContent = loading ? 'Entrando…' : 'Entrar ou criar conta';
-        ui.loginText.textContent = loading
-            ? 'Conclua o login na janela do Google.'
-            : 'Use sua conta Google. Se for a primeira vez, criamos sua conta automaticamente. Só salvamos suas preferências de voz.';
+        ui.loginTitle.textContent = t(loading ? 'login.titleLoading' : 'login.title');
+        ui.loginText.textContent = t(loading ? 'login.textLoading' : 'login.text');
         ui.loginProgress.hidden = !loading;
         ui.loginError.hidden = estado !== 'erro';
-        ui.loginError.textContent = errorMessage;
+        ui.loginError.textContent = errorCode ? t(`login.error.${errorCode}`) : '';
         ui.googleButton.disabled = loading;
-        ui.googleButtonText.textContent = loading ? 'Aguardando o Google…'
-            : estado === 'erro' ? 'Tentar novamente' : 'Continuar com Google';
-        ui.skipButton.textContent = loading ? 'Cancelar' : 'Agora não, continuar sem conta';
+        ui.googleButtonText.textContent = t(loading ? 'login.googleLoading' : estado === 'erro' ? 'login.retry' : 'login.google');
+        ui.skipButton.textContent = t(loading ? 'login.cancel' : 'login.skip');
         (loading ? ui.skipButton : ui.googleButton).focus();
     }
 
@@ -209,7 +251,7 @@
             await adoptAccountPreferences(preferences);
             renderAccount(await auth.readSession());
             closeLoginScreen();
-            showMessage('Conta conectada. Suas preferências estão sincronizadas.');
+            showMessage(t('message.connected'));
         } catch (error) {
             if (attempt !== loginAttempt) return;
             if (error.code === 'cancelled') {
@@ -217,7 +259,7 @@
                 return;
             }
             console.error('[HoverVoice] Falha no login:', error);
-            showLoginScreen('erro', LOGIN_ERRORS[error.code] || LOGIN_ERRORS.server);
+            showLoginScreen('erro', ['not-configured', 'network', 'google'].includes(error.code) ? error.code : 'server');
         }
     }
 
@@ -228,7 +270,7 @@
         }
         await auth.signOut();
         renderAccount(null);
-        showMessage('Você saiu da conta. Suas preferências continuam neste navegador.');
+        showMessage(t('message.signedOut'));
     }
 
     /** Envia as preferências de voz à conta, avisando só se algo der errado. */
@@ -237,9 +279,7 @@
             await auth.pushPreferences(state);
         } catch (error) {
             if (error.code === 'expired') renderAccount(null);
-            showMessage(error.code === 'expired'
-                ? 'Sua sessão expirou. Entre de novo para sincronizar.'
-                : 'Sem conexão: suas preferências foram salvas só neste navegador.', 'error');
+            showMessage(t(error.code === 'expired' ? 'message.sessionExpired' : 'message.syncOffline'), 'error');
         }
     }
 
@@ -259,7 +299,7 @@
         } catch (error) {
             if (error.code === 'expired') {
                 renderAccount(null);
-                showMessage('Sua sessão expirou. Entre de novo para sincronizar.', 'error');
+                showMessage(t('message.sessionExpired'), 'error');
             }
         }
     }
@@ -274,22 +314,18 @@
         try {
             window.speechSynthesis.cancel();
 
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = state.language;
-            utterance.rate = clamp(state.voiceRate, RATE_RANGE);
-            utterance.pitch = clamp(state.voicePitch, PITCH_RANGE);
-            utterance.volume = clamp(state.voiceVolume, VOLUME_RANGE);
+            const utterance = HoverVoiceVoice.createUtterance(text, state);
 
             utterance.onerror = (event) => {
                 if (event.error !== 'interrupted' && event.error !== 'canceled') {
-                    showMessage('Não foi possível reproduzir o áudio.', 'error');
+                    showMessage(t('message.audioFailed'), 'error');
                 }
             };
 
             window.speechSynthesis.speak(utterance);
         } catch (error) {
             console.error('[HoverVoice] Sintetizador indisponível:', error);
-            showMessage('A síntese de voz não está disponível neste navegador.', 'error');
+            showMessage(t('message.noSynth'), 'error');
         }
     }
 
@@ -324,12 +360,34 @@
         const text = ui.testInput.value.trim();
 
         if (!text) {
-            showMessage('Digite um texto para testar a voz.', 'error');
+            showMessage(t('message.typeText'), 'error');
             ui.testInput.focus();
             return;
         }
 
         speak(text);
+    }
+
+    async function handleUiLanguage(event) {
+        const button = event.target.closest('button[data-value]');
+        if (!button) return;
+        state = { ...state, uiLanguage: button.dataset.value };
+        render();
+        await saveState();
+    }
+
+    async function handleVoiceLanguage(event) {
+        const button = event.target.closest('button[data-value]');
+        if (!button) return;
+        state = { ...state, voiceLanguage: button.dataset.value };
+        renderLanguage();
+        await saveState();
+    }
+
+    async function handleVoiceChoice() {
+        const language = displayedVoiceLanguage();
+        state = { ...state, voices: { ...state.voices, [language]: ui.voiceSelect.value } };
+        await saveState();
     }
 
     /** Mantém o popup sincronizado caso o estado mude pelo atalho de teclado. */
@@ -349,6 +407,9 @@
         ui.toggle.addEventListener('change', handleToggle);
         ui.pdfAuto.addEventListener('change', handlePdfAutoChange);
         ui.testButton.addEventListener('click', handleTestVoice);
+        ui.uiLanguageGroup.addEventListener('click', handleUiLanguage);
+        ui.voiceLanguageGroup.addEventListener('click', handleVoiceLanguage);
+        ui.voiceSelect.addEventListener('change', handleVoiceChoice);
 
         [ui.rate, ui.pitch, ui.volume].forEach((control) => {
             control.addEventListener('input', handleVoiceSettingsChange);
