@@ -13,7 +13,17 @@ Valem para **cada** tarefa deste quadro. Antes de começar e ao terminar, confir
 
 ## Em andamento
 
-_(nenhuma)_
+### 6. Suporte a outros idiomas (inglês e espanhol)
+Hoje o produto é só em português (pt-BR). Permitir usar a extensão em inglês e espanhol, tanto na interface quanto na voz.
+- [x] **Decisões do dono:** seletor de idioma no popup (padrão = idioma do navegador: pt, en ou es, senão pt-BR; escolha salva); a voz acompanha o `lang` de cada página/PDF e, se faltar, o idioma da interface; textos em dicionário próprio (`src/shared/i18n.js`), sem `chrome.i18n`.
+- [x] Escolher a estratégia de textos: `chrome.i18n` (`_locales/pt_BR`, `en`, `es` + `messages.json`) ou um dicionário próprio em `src/shared/`. Decidir e documentar no `CLAUDE.md`, mantendo o projeto sem build.
+- [ ] Extrair todo texto visível e falado (popup, leitor de PDF, avisos, anúncios `aria-live`, nome e descrição no `manifest.json`) para os arquivos de tradução.
+- [ ] Ligar o idioma da voz ao campo `language` do `extensionState` (hoje fixo em `pt-BR`), com opções `pt-BR`, `en-US` e `es-ES`, e escolher a voz instalada que corresponda.
+- [x] Desenhar o seletor de idioma no Figma (seção "Idiomas · proposta", nó `57:12`, popup em PT, EN e ES). **Aguardando aprovação do design antes de codar.**
+- [ ] Implementar o seletor de idioma no popup.
+- [ ] Revisar o agrupamento de parágrafos em `pdf-blocks.js` para PDFs em inglês e espanhol (hifenização, pontuação como ¿ e ¡).
+- [ ] Testar nos três idiomas: popup, leitor de PDF, narração em `TESTE.html` e `Alt+A`/`Alt+P`.
+- [ ] Atualizar a documentação (Tarefa 5) com o suporte a idiomas.
 
 ## A fazer
 
@@ -37,17 +47,6 @@ Fica por último (depois da Tarefa 6) para refletir o código já refatorado. It
 - [ ] `INICIO_RAPIDO.md` e `CHECKLIST.md`: versão `1.0.0`, ícone SVG e nenhum item sobre PDF ou `Alt+P`.
 - [ ] Ainda **não verificados**: `INSTALACAO.html`, `TESTE.html` e os dois PDFs em `docs/`. Conferir e corrigir.
 - [ ] Atualizar também tudo que as tarefas 1 a 4 mudarem (estrutura, login, UI) e revisar se os cinco Markdowns não repetem o mesmo conteúdo; consolidar se fizer sentido.
-
-### 6. Suporte a outros idiomas (inglês e espanhol)
-Hoje o produto é só em português (pt-BR). Permitir usar a extensão em inglês e espanhol, tanto na interface quanto na voz.
-- [ ] **Definir antes de começar (perguntar ao dono):** o idioma da interface acompanha o do navegador ou é escolhido no popup? A voz de narração muda junto com a interface ou acompanha o idioma de cada página (`lang`)?
-- [ ] Escolher a estratégia de textos: `chrome.i18n` (`_locales/pt_BR`, `en`, `es` + `messages.json`) ou um dicionário próprio em `src/shared/`. Decidir e documentar no `CLAUDE.md`, mantendo o projeto sem build.
-- [ ] Extrair todo texto visível e falado (popup, leitor de PDF, avisos, anúncios `aria-live`, nome e descrição no `manifest.json`) para os arquivos de tradução.
-- [ ] Ligar o idioma da voz ao campo `language` do `extensionState` (hoje fixo em `pt-BR`), com opções `pt-BR`, `en-US` e `es-ES`, e escolher a voz instalada que corresponda.
-- [ ] Seletor de idioma no popup, seguindo o visual novo (desenhar no Figma e aguardar aprovação antes de codar).
-- [ ] Revisar o agrupamento de parágrafos em `pdf-blocks.js` para PDFs em inglês e espanhol (hifenização, pontuação como ¿ e ¡).
-- [ ] Testar nos três idiomas: popup, leitor de PDF, narração em `TESTE.html` e `Alt+A`/`Alt+P`.
-- [ ] Atualizar a documentação (Tarefa 5) com o suporte a idiomas.
 
 ## Concluído ✅
 
