@@ -38,7 +38,7 @@ Reflete o código já refatorado, com login e idiomas.
 
 ## A fazer
 
-Inclua no .gitignore os .md, menos o README.md
+_(nenhuma)_
 
 ## Concluído ✅
 
