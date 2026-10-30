@@ -47,6 +47,9 @@
         accountLoggedOut: document.getElementById('contaSaiu'),
         accountLoggedIn: document.getElementById('contaEntrou'),
         accountEmail: document.getElementById('contaEmail'),
+        accountDemo: document.getElementById('contaDemo'),
+        accountSynced: document.getElementById('contaSincronizado'),
+        loginNote: document.getElementById('loginNota'),
         accountButton: document.getElementById('botaoConta'),
         loginScreen: document.getElementById('telaLogin'),
         loginTitle: document.getElementById('loginTitulo'),
@@ -204,6 +207,8 @@
         ui.accountLoggedOut.hidden = loggedIn;
         ui.accountLoggedIn.hidden = !loggedIn;
         ui.accountEmail.textContent = session?.email || '';
+        ui.accountDemo.hidden = !auth.isDemo();
+        ui.accountSynced.textContent = t(auth.isDemo() ? 'account.syncedDemo' : 'account.synced');
         ui.accountButton.textContent = t(loggedIn ? 'account.signOut' : 'account.signIn');
     }
 
@@ -222,6 +227,7 @@
         ui.googleButton.disabled = loading;
         ui.googleButtonText.textContent = t(loading ? 'login.googleLoading' : estado === 'erro' ? 'login.retry' : 'login.google');
         ui.skipButton.textContent = t(loading ? 'login.cancel' : 'login.skip');
+        ui.loginNote.textContent = t(auth.isDemo() ? 'login.demoNote' : 'login.note');
         (loading ? ui.skipButton : ui.googleButton).focus();
     }
 

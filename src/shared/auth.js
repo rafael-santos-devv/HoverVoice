@@ -15,8 +15,16 @@ globalThis.HoverVoiceAuth = (() => {
     const API_BASE_URL = 'http://localhost:3000';
     const GOOGLE_CLIENT_ID = '';
 
-    // Sem Client ID o login fica desativado e a interface o esconde (a extensão funciona só com preferências locais).
-    const isConfigured = () => Boolean(GOOGLE_CLIENT_ID);
+    // Modo demonstração: sem Client ID, o fluxo de login é simulado só neste navegador (sem rede e sem Google),
+    // para apresentar a ideia. Com Client ID o login é o real e este modo é ignorado; ponha false para esconder o login.
+    const DEMO_MODE = true;
+    const DEMO_ACCOUNT_KEY = 'demoAccount';
+    const DEMO_EMAIL = 'demo@hovervoice.dev';
+    const DEMO_DELAY_MS = 1400;
+
+    const isReal = () => Boolean(GOOGLE_CLIENT_ID);
+    const isDemo = () => !isReal() && DEMO_MODE;
+    const isConfigured = () => isReal() || isDemo();
 
     const SESSION_KEY = 'authSession';
     const SYNCED_FIELDS = ['voiceRate', 'voicePitch', 'voiceVolume'];
@@ -26,7 +34,18 @@ globalThis.HoverVoiceAuth = (() => {
 
     async function readSession() {
         const result = await chrome.storage.local.get(SESSION_KEY);
-        return result[SESSION_KEY] || null;
+        const session = result[SESSION_KEY] || null;
+        // Uma sessão de demonstração não vale depois que o login real é configurado.
+        if (session?.demo && !isDemo()) {
+            await chrome.storage.local.remove(SESSION_KEY);
+            return null;
+        }
+        return session;
+    }
+
+    async function readDemoPreferences() {
+        const result = await chrome.storage.local.get(DEMO_ACCOUNT_KEY);
+        return result[DEMO_ACCOUNT_KEY]?.preferences || null;
     }
 
     const clearSession = () => chrome.storage.local.remove(SESSION_KEY);
@@ -84,6 +103,12 @@ globalThis.HoverVoiceAuth = (() => {
      * salvas na conta (ou null se a conta é nova).
      */
     async function signInWithGoogle() {
+        if (isDemo()) {
+            await new Promise((resolve) => setTimeout(resolve, DEMO_DELAY_MS));
+            await chrome.storage.local.set({ [SESSION_KEY]: { token: 'demo', email: DEMO_EMAIL, demo: true } });
+            return { email: DEMO_EMAIL, preferences: await readDemoPreferences() };
+        }
+
         const { idToken, nonce } = await requestGoogleIdToken();
         const { token, user, preferences } = await request('/auth/google', { method: 'POST', body: { idToken, nonce } });
         await chrome.storage.local.set({ [SESSION_KEY]: { token, email: user.email } });
@@ -93,7 +118,7 @@ globalThis.HoverVoiceAuth = (() => {
     async function signOut() {
         const session = await readSession();
         await clearSession();
-        if (session) await request('/auth/logout', { method: 'POST', token: session.token }).catch(() => {});
+        if (session && !session.demo) await request('/auth/logout', { method: 'POST', token: session.token }).catch(() => {});
     }
 
     const pickSynced = (state) => Object.fromEntries(SYNCED_FIELDS.map((field) => [field, state[field]]));
@@ -102,14 +127,19 @@ globalThis.HoverVoiceAuth = (() => {
     async function pullPreferences() {
         const session = await readSession();
         if (!session) return null;
+        if (session.demo) return readDemoPreferences();
         return (await request('/preferences', { token: session.token })).preferences;
     }
 
     async function pushPreferences(state) {
         const session = await readSession();
         if (!session) return;
+        if (session.demo) {
+            await chrome.storage.local.set({ [DEMO_ACCOUNT_KEY]: { preferences: pickSynced(state) } });
+            return;
+        }
         await request('/preferences', { method: 'PUT', token: session.token, body: pickSynced(state) });
     }
 
-    return { SESSION_KEY, isConfigured, readSession, signInWithGoogle, signOut, pullPreferences, pushPreferences };
+    return { SESSION_KEY, isConfigured, isDemo, readSession, signInWithGoogle, signOut, pullPreferences, pushPreferences };
 })();
