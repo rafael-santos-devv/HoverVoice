@@ -31,7 +31,7 @@ Extensão de navegador (Chrome/Edge, Manifest V3) de acessibilidade para pessoas
 | `src/viewer/viewer.html/css/js` | Leitor de PDF (módulo ES) que desenha páginas com PDF.js e sobrepõe blocos narráveis |
 | `src/viewer/pdf-blocks.js` | Módulo puro (sem DOM): agrupa fragmentos de texto do PDF em parágrafos |
 | `TESTE.html`, `exemplos/` | Página e PDFs para teste manual |
-| `docs/` | Documentos do projeto (PDF) |
+| `docs/` | Documentos do projeto (PDF) e contrato da API (`api-contrato.md`) |
 
 ## Arquitetura (o que não pode quebrar)
 

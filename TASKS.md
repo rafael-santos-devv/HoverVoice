@@ -13,24 +13,6 @@ Valem para **cada** tarefa deste quadro. Antes de começar e ao terminar, confir
 
 ## Em andamento
 
-### 6. Suporte a outros idiomas (inglês e espanhol)
-Hoje o produto é só em português (pt-BR). Permitir usar a extensão em inglês e espanhol, tanto na interface quanto na voz.
-- [x] **Decisões do dono:** seletor de idioma no popup (padrão = idioma do navegador: pt, en ou es, senão pt-BR; escolha salva); a voz acompanha o `lang` de cada página/PDF e, se faltar, o idioma da interface; textos em dicionário próprio (`src/shared/i18n.js`), sem `chrome.i18n`.
-- [x] Escolher a estratégia de textos: `chrome.i18n` (`_locales/pt_BR`, `en`, `es` + `messages.json`) ou um dicionário próprio em `src/shared/`. Decidir e documentar no `CLAUDE.md`, mantendo o projeto sem build.
-- [x] Extrair todo texto visível e falado (popup, leitor de PDF, avisos, anúncios `aria-live`, nome e descrição no `manifest.json`) para os arquivos de tradução.
-- [x] Seletor "Idioma da voz": **Automático** (padrão: `lang` da página/PDF e, se faltar, o da interface), PT, EN ou ES fixos (imersão). Ligar ao campo `language` do `extensionState` (hoje fixo em `pt-BR`).
-- [x] Escolha de voz: lista de `speechSynthesis.getVoices()` filtrada pelo idioma, com "padrão do sistema"; guardar a voz escolhida por idioma. Lidar com a lista assíncrona (`voiceschanged`) e com vozes que somem.
-- [ ] Ideia futura (fora desta tarefa): traduzir o conteúdo das páginas; exige serviço externo.
-- [x] Desenhar o seletor de idioma no Figma (seção "Idiomas · proposta", nó `57:12`, popup em PT, EN e ES). Inclui o popup com "Idioma da voz" e escolha de voz (nó `59:18`). **Aguardando aprovação do design antes de codar.**
-- [x] Implementar o seletor de idioma no popup.
-- [x] Revisar o agrupamento de parágrafos em `pdf-blocks.js` para PDFs em inglês e espanhol: o fim de frase (`.!?…`) e a hifenização (letras acentuadas e ñ) já cobrem os dois idiomas; sem mudança. Não testado com PDFs reais em inglês/espanhol (só há exemplos em português).
-- [x] Testar nos três idiomas (popup, leitor de PDF, `TESTE.html`), no Chrome por script. Não testado: voz real em espanhol (sem voz instalada na máquina de teste) e os atalhos `Alt+A`/`Alt+P`.
-- [ ] Atualizar a documentação (Tarefa 5) com o suporte a idiomas.
-
-## A fazer
-
-Inclua no .gitignore os .md, menos o README.md
-
 ### 4. Tela de login e preferências salvas
 Usuários que criarem login poderão salvar suas preferências de voz (velocidade, tom, volume e demais ajustes) e recuperá-las em outro navegador.
 - [x] **Decisões do dono:** login e registro são **opcionais** e **minimalistas**; autenticação **só com Google** (entrar e criar conta são o mesmo fluxo); as preferências sincronizadas são velocidade, tom e volume (não existe "intensidade"). Sem e-mail/senha, logo sem "recuperar senha".
@@ -42,13 +24,21 @@ Usuários que criarem login poderão salvar suas preferências de voz (velocidad
 - [ ] Testar com o Google de verdade (login, logout, token expirado). Já testados com o Google simulado: login, logout, sincronização, sem Client ID e backend fora do ar.
 
 ### 5. Atualizar documentação e Markdowns (por último)
-Fica por último (depois da Tarefa 6) para refletir o código já refatorado. Itens já encontrados desatualizados:
-- [ ] `config.json`: versão `1.0.0` (manifest está em `1.2.0`); `file-structure` cita `images/icon128.svg` e omite `background.js`, `viewer.*`, `pdf-blocks.js`, `lib/`; `permissions` lista `scripting`, mas o manifest usa `storage`, `activeTab`, `webRequest` e `<all_urls>`; não menciona `Alt+P` nem o leitor de PDF.
-- [ ] `README.md`: em "Limitações conhecidas" diz que não lê PDFs, mas a própria seção "Leitura de PDFs" descreve o leitor; diz que `DEFAULT_STATE` está em três arquivos (são quatro); a estrutura de pastas não lista `docs/`, `exemplos/` e `INSTALACAO.html`; a tabela "DOC-01 a DOC-04" não bate com os PDFs de `docs/`.
-- [ ] `RESUMO.md`: versão `1.0.0`; ícone SVG (hoje são PNG); afirma usar `MutationObserver` (o README diz que não usa); lista "Suporte a PDF" como futuro; lista só 5 arquivos principais.
-- [ ] `INICIO_RAPIDO.md` e `CHECKLIST.md`: versão `1.0.0`, ícone SVG e nenhum item sobre PDF ou `Alt+P`.
-- [ ] Ainda **não verificados**: `INSTALACAO.html`, `TESTE.html` e os dois PDFs em `docs/`. Conferir e corrigir.
-- [ ] Atualizar também tudo que as tarefas 1 a 4 mudarem (estrutura, login, UI) e revisar se os cinco Markdowns não repetem o mesmo conteúdo; consolidar se fizer sentido.
+Reflete o código já refatorado, com login e idiomas.
+- [x] `config.json`: versão 1.2.0, estrutura em `src/`, permissões reais, `Alt+P`, leitor de PDF, idiomas, conta e vozes.
+- [x] `README.md`: reescrito (instalação, uso, idiomas e vozes, conta com Google, leitor de PDF, estrutura, arquitetura, permissões, limitações e solução de problemas atualizados).
+- [x] `RESUMO.md` e `INICIO_RAPIDO.md`: removidos. Repetiam o README com dados vencidos (v1.0.0, ícone SVG, `MutationObserver`, PDF como "futuro"); o início rápido agora está no README. Continuam no histórico do git.
+- [x] `CHECKLIST.md`: refeito como roteiro de verificação da v1.2.0 (inclui PDF, idiomas, vozes e conta).
+- [x] `INSTALACAO.html` e `TESTE.html`: versão 1.2.0, `Alt+P`, idiomas, PDF e conta; `TESTE.html` ganhou parágrafos `lang="en"`, `lang="es"` e `lang="pt-BR"` para testar a voz automática; botões mortos de "Reportar problema" viraram links para as issues do GitHub.
+- [ ] **Pendente (equipe):** os dois PDFs de `docs/` não podem ser editados por aqui. Pontos a corrigir:
+  - **Documentação do Software:** README "1.1.0" (já é 1.2.0); estrutura de arquivos na raiz (agora em `src/`) e menção a `INICIO_RAPIDO.md` e `RESUMO.md` (removidos); permissões sem `identity`; RN-01 e tabela de configuração padrão (`Idioma pt-BR` virou `uiLanguage`, `voiceLanguage` e `voices`); telas e estados do popup (visual novo, seletores de idioma, conta); seção 9 inteira: o login implementado é **só com Google**, opcional, **sem e-mail/senha nem recuperação de senha**, sincroniza só velocidade, tom e volume, não tem "intensidade", o módulo está em `src/shared/auth.js` (usado pelo popup, não pelo `background.js`) e as perguntas em aberto estão respondidas (Google; backend próprio em Node.js + SQLite); em conflito vale a conta ao abrir o popup.
+  - **Documento de Qualidade:** RF-L01 a RNF-L03 e a seção 6 (e-mail e senha); CT-16 (idioma pt-BR); faltam casos para idiomas, escolha de voz e PDF em outros idiomas; o contraste (CT-24) ainda não foi medido.
+  - Os IDs `RF/RN/RNF` seguem provisórios até a conferência com o DOC-04.
+  - Posso redigir o texto atualizado dessas seções para a equipe colar nos documentos de origem.
+
+## A fazer
+
+Inclua no .gitignore os .md, menos o README.md
 
 ## Concluído ✅
 
@@ -70,3 +60,17 @@ Organizar o código para que novas features entrem sem mexer em vários arquivos
 - [x] Usar `imskyleen/animate-ui` como referência de animações e reproduzi-las em CSS/JS puro (sem React). Se algum efeito não tiver equivalente nativo, adaptar até o resultado visual ficar igual.
 - [x] Animações respeitam `prefers-reduced-motion`; contraste e foco visível preservados (público com baixa visão).
 - [x] Aplicar o mesmo visual ao leitor de PDF (`viewer.html/css`) para manter coerência.
+
+### ✅ 6. Suporte a outros idiomas (inglês e espanhol)
+Hoje o produto é só em português (pt-BR). Permitir usar a extensão em inglês e espanhol, tanto na interface quanto na voz.
+- [x] **Decisões do dono:** seletor de idioma no popup (padrão = idioma do navegador: pt, en ou es, senão pt-BR; escolha salva); a voz acompanha o `lang` de cada página/PDF e, se faltar, o idioma da interface; textos em dicionário próprio (`src/shared/i18n.js`), sem `chrome.i18n`.
+- [x] Escolher a estratégia de textos: `chrome.i18n` (`_locales/pt_BR`, `en`, `es` + `messages.json`) ou um dicionário próprio em `src/shared/`. Decidir e documentar no `CLAUDE.md`, mantendo o projeto sem build.
+- [x] Extrair todo texto visível e falado (popup, leitor de PDF, avisos, anúncios `aria-live`, nome e descrição no `manifest.json`) para os arquivos de tradução.
+- [x] Seletor "Idioma da voz": **Automático** (padrão: `lang` da página/PDF e, se faltar, o da interface), PT, EN ou ES fixos (imersão). Ligar ao campo `language` do `extensionState` (hoje fixo em `pt-BR`).
+- [x] Escolha de voz: lista de `speechSynthesis.getVoices()` filtrada pelo idioma, com "padrão do sistema"; guardar a voz escolhida por idioma. Lidar com a lista assíncrona (`voiceschanged`) e com vozes que somem.
+- [x] Ideia futura (fora desta tarefa): traduzir o conteúdo das páginas; exige serviço externo.
+- [x] Desenhar o seletor de idioma no Figma (seção "Idiomas · proposta", nó `57:12`, popup em PT, EN e ES). Inclui o popup com "Idioma da voz" e escolha de voz (nó `59:18`). **Aguardando aprovação do design antes de codar.**
+- [x] Implementar o seletor de idioma no popup.
+- [x] Revisar o agrupamento de parágrafos em `pdf-blocks.js` para PDFs em inglês e espanhol: o fim de frase (`.!?…`) e a hifenização (letras acentuadas e ñ) já cobrem os dois idiomas; sem mudança. Não testado com PDFs reais em inglês/espanhol (só há exemplos em português).
+- [x] Testar nos três idiomas (popup, leitor de PDF, `TESTE.html`), no Chrome por script. Não testado: voz real em espanhol (sem voz instalada na máquina de teste) e os atalhos `Alt+A`/`Alt+P`.
+- [x] Atualizar a documentação (Tarefa 5) com o suporte a idiomas.
