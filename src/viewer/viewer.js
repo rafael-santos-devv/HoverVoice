@@ -28,6 +28,7 @@ const {
     DEFAULT_STATE, RATE_RANGE, PITCH_RANGE, VOLUME_RANGE,
     clamp, readState, writeState, stateFromChange
 } = HoverVoice;
+const t = HoverVoiceI18n.t;
 
 const ZOOM_STORAGE_KEY = 'hovervoice.pdfZoom';
 const ZOOM_RANGE = { min: 0.5, max: 3 };
@@ -141,12 +142,7 @@ function speakNotice(text) {
     if (!state.enabled) return;
     try {
         window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = state.language;
-        utterance.rate = clamp(state.voiceRate, RATE_RANGE);
-        utterance.pitch = clamp(state.voicePitch, PITCH_RANGE);
-        utterance.volume = clamp(state.voiceVolume, VOLUME_RANGE);
-        window.speechSynthesis.speak(utterance);
+        window.speechSynthesis.speak(HoverVoiceVoice.createUtterance(text, state));
     } catch (error) {
         console.error('[HoverVoice] Sintetizador indisponível:', error);
     }
@@ -179,8 +175,8 @@ function showDocument() {
 
 function showEmptyPanel() {
     showPanel({
-        title: 'Abra um PDF para ouvi-lo',
-        text: 'Escolha um arquivo ou arraste-o para esta janela. Depois, passe o mouse sobre o texto ou navegue com a tecla Tab.'
+        title: t('viewer.emptyTitle'),
+        text: t('viewer.emptyText')
     });
 }
 
@@ -195,10 +191,8 @@ function showErrorPanel(title, text, { canOpenNative = false } = {}) {
 function askPassword(wasIncorrect) {
     return new Promise((resolve) => {
         showPanel({
-            title: 'Este PDF é protegido por senha',
-            text: wasIncorrect
-                ? 'A senha estava incorreta. Digite novamente.'
-                : 'Digite a senha para abrir o documento.',
+            title: t('viewer.passwordTitle'),
+            text: t(wasIncorrect ? 'viewer.passwordWrong' : 'viewer.passwordAsk'),
             passwordForm: true
         });
         ui.campoSenha.value = '';
@@ -229,9 +223,10 @@ function askPassword(wasIncorrect) {
 // =========================================================================
 
 class LoadError extends Error {
-    constructor(title, text, { canOpenNative = false } = {}) {
-        super(text);
-        this.title = title;
+    constructor(titleKey, textKey, { canOpenNative = false, params = {} } = {}) {
+        super(textKey);
+        this.title = t(titleKey);
+        this.text = t(textKey, params);
         this.canOpenNative = canOpenNative;
     }
 }
@@ -241,8 +236,8 @@ function assertIsPdf(buffer) {
     const head = new TextDecoder('latin1').decode(buffer.slice(0, 1024));
     if (!head.includes('%PDF-')) {
         throw new LoadError(
-            'Este arquivo não é um PDF',
-            'O endereço não devolveu um documento PDF. Se o arquivo exige login, abra-o no visualizador do navegador, salve-o e escolha-o aqui.',
+            'viewer.notPdfTitle',
+            'viewer.notPdfUrl',
             { canOpenNative: true }
         );
     }
@@ -255,22 +250,22 @@ async function fetchPdf(url) {
     } catch {
         if (url.startsWith('file:')) {
             throw new LoadError(
-                'Não foi possível ler o arquivo local',
-                'Para abrir arquivos do computador por endereço, ative "Permitir acesso a URLs de arquivo" nos detalhes da extensão em chrome://extensions. Você também pode usar "Escolher arquivo".'
+                'viewer.localTitle',
+                'viewer.localText'
             );
         }
         throw new LoadError(
-            'Não foi possível baixar o PDF',
-            'Verifique sua conexão e tente novamente, ou abra o arquivo no visualizador do navegador.',
+            'viewer.downloadFailTitle',
+            'viewer.downloadFailText',
             { canOpenNative: true }
         );
     }
 
     if (!response.ok) {
         throw new LoadError(
-            'Não foi possível baixar o PDF',
-            `O servidor respondeu com o erro ${response.status}.`,
-            { canOpenNative: true }
+            'viewer.downloadFailTitle',
+            'viewer.serverError',
+            { canOpenNative: true, params: { status: response.status } }
         );
     }
 
@@ -367,6 +362,8 @@ async function readDocumentInfo() {
 
     const meta = await pdf.getMetadata().catch(() => null);
     const title = pickTitle(meta?.info?.Title, pdfName);
+    // O idioma declarado no PDF guia a voz no modo automático (o content.js lê o lang mais próximo).
+    ui.documento.lang = meta?.info?.Language || '';
     ui.titulo.textContent = title;
     ui.titulo.title = title;
     document.title = `${title} — HoverVoice`;
@@ -375,9 +372,9 @@ async function readDocumentInfo() {
 
 function announceOpened(title) {
     const count = pdf.numPages;
-    const pagesLabel = count === 1 ? '1 página' : `${count} páginas`;
-    const hint = state.enabled ? '' : ' A narração está desligada: pressione Alt+A para ligá-la.';
-    announce(`Documento aberto: ${title}, ${pagesLabel}.${hint}`);
+    const pagesLabel = count === 1 ? t('viewer.pagesOne') : t('viewer.pagesMany', { count });
+    const hint = state.enabled ? '' : t('viewer.narrationHint');
+    announce(t('viewer.opened', { title, pages: pagesLabel, hint }));
 }
 
 async function openDocument(bytes, name, origin) {
@@ -386,7 +383,7 @@ async function openDocument(bytes, name, origin) {
     disposeDocument();
     setControlsEnabled(false);
     hideMessage();
-    showPanel({ title: 'Abrindo o PDF…', text: 'Isso leva só alguns instantes.', showPicker: false });
+    showPanel({ title: t('viewer.openingTitle'), text: t('viewer.fewMoments'), showPicker: false });
 
     pdfName = /\.pdf$/i.test(name) ? name : `${name}.pdf`;
     sourceUrl = origin;
@@ -406,8 +403,8 @@ async function openDocument(bytes, name, origin) {
         }
         console.error('[HoverVoice] Falha ao abrir o PDF:', error);
         showErrorPanel(
-            'Não foi possível abrir este PDF',
-            'O arquivo pode estar corrompido ou usar um formato que o leitor não reconhece.',
+            t('viewer.openFailTitle'),
+            t('viewer.openFailText'),
             { canOpenNative: true }
         );
         return;
@@ -520,7 +517,7 @@ function createPageCanvas(page) {
 function showPageError(entry) {
     const message = document.createElement('p');
     message.className = 'pagina-erro';
-    message.textContent = 'Não foi possível exibir esta página.';
+    message.textContent = t('viewer.pageFail');
     entry.el.replaceChildren(message);
 }
 
@@ -555,7 +552,7 @@ async function renderPage(entry) {
 
         if (entry.number === 1 && blocks.length === 0) {
             showMessage(
-                'Esta página não tem texto que possa ser narrado. Se o PDF for escaneado (feito de imagens), a narração não funciona sem reconhecimento de texto (OCR).',
+                t('viewer.noText'),
                 'aviso'
             );
         }
@@ -630,7 +627,7 @@ async function openFile(file) {
 
     const looksLikePdf = file.type === 'application/pdf' || /\.pdf$/i.test(file.name);
     if (!looksLikePdf) {
-        showErrorPanel('Este arquivo não é um PDF', `"${file.name}" não parece ser um documento PDF.`);
+        showErrorPanel(t('viewer.notPdfTitle'), t('viewer.notPdfFile', { name: file.name }));
         return;
     }
 
@@ -644,7 +641,7 @@ async function openFile(file) {
 }
 
 async function openUrl(url) {
-    showPanel({ title: 'Baixando o PDF…', text: 'Isso leva só alguns instantes.', showPicker: false });
+    showPanel({ title: t('viewer.downloadingTitle'), text: t('viewer.fewMoments'), showPicker: false });
     sourceUrl = url;
 
     try {
@@ -657,11 +654,11 @@ async function openUrl(url) {
 
 function showLoadError(error) {
     if (error instanceof LoadError) {
-        showErrorPanel(error.title, error.message, { canOpenNative: error.canOpenNative });
+        showErrorPanel(error.title, error.text, { canOpenNative: error.canOpenNative });
         return;
     }
     console.error('[HoverVoice] Erro inesperado:', error);
-    showErrorPanel('Algo deu errado', 'Não foi possível carregar o arquivo.', { canOpenNative: true });
+    showErrorPanel(t('viewer.genericTitle'), t('viewer.genericText'), { canOpenNative: true });
 }
 
 function downloadCopy() {
@@ -688,7 +685,7 @@ function openInBrowserViewer() {
 
 function renderNarrationButton() {
     ui.narracao.setAttribute('aria-pressed', String(state.enabled));
-    ui.narracaoTexto.textContent = state.enabled ? 'Narração ligada' : 'Narração desligada';
+    ui.narracaoTexto.textContent = t(state.enabled ? 'viewer.narrationOn' : 'viewer.narrationOff');
     document.body.dataset.narracao = state.enabled ? 'ligada' : 'desligada';
 }
 
@@ -697,7 +694,7 @@ async function toggleNarration() {
         await writeState({ ...state, enabled: !state.enabled });
     } catch (error) {
         console.error('[HoverVoice] Falha ao gravar o estado:', error);
-        showMessage('Não foi possível alterar a narração.', 'erro');
+        showMessage(t('viewer.toggleFail'), 'erro');
     }
 }
 
@@ -705,7 +702,7 @@ function handleStateChange(changes, areaName) {
     const newState = stateFromChange(changes, areaName);
     if (!newState) return;
     state = newState;
-    renderNarrationButton();
+    renderLanguage();
 }
 
 // =========================================================================
@@ -765,9 +762,17 @@ function attachListeners() {
     chrome.storage.onChanged.addListener(handleStateChange);
 }
 
+/** Aplica o idioma da interface; o conteúdo dinâmico (painel, mensagens) segue o idioma de quando foi criado. */
+function renderLanguage() {
+    HoverVoiceI18n.setFromState(state);
+    HoverVoiceI18n.apply();
+    renderNarrationButton();
+    if (!pdf) ui.titulo.textContent = t('viewer.noFile');
+}
+
 async function init() {
     state = await readState();
-    renderNarrationButton();
+    renderLanguage();
     attachListeners();
 
     const file = new URLSearchParams(location.search).get('file');
