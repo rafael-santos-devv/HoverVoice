@@ -61,7 +61,7 @@ Reflete o código já refatorado, com login e idiomas.
 - [x] `RESUMO.md` e `INICIO_RAPIDO.md`: removidos. Repetiam o README com dados vencidos (v1.0.0, ícone SVG, `MutationObserver`, PDF como "futuro"); o início rápido agora está no README. Continuam no histórico do git.
 - [x] `CHECKLIST.md`: refeito como roteiro de verificação da v1.2.0 (inclui PDF, idiomas, vozes e conta).
 - [x] `INSTALACAO.html` e `TESTE.html`: versão 1.2.0, `Alt+P`, idiomas, PDF e conta; `TESTE.html` ganhou parágrafos `lang="en"`, `lang="es"` e `lang="pt-BR"` para testar a voz automática; botões mortos de "Reportar problema" viraram links para as issues do GitHub.
-- [x] Documentação do Software e Documento de Qualidade reescritos para a v1.2.0 em `docs/atualizados/` (`.docx` editável e `.pdf` de cada um). Os PDFs originais de `docs/` ficam como estavam. Pontos para a equipe conferir: IDs RF/RN/RNF novos (RF-11 a RF-17, RN-05 a RN-07, RNF-06 e RNF-07) continuam provisórios até o DOC-04; o ciclo 1 de testes foi por script (sem ouvir o áudio) e o contraste (CT-24) ainda precisa ser medido.
+- [x] Documentação do Software e Documento de Qualidade reescritos para a v1.2.0 em `docs/` (`.docx` editável e `.pdf` de cada um); substituem os PDFs antigos. Pontos para a equipe conferir: IDs RF/RN/RNF novos (RF-11 a RF-17, RN-05 a RN-07, RNF-06 e RNF-07) continuam provisórios até o DOC-04; o ciclo 1 de testes foi por script (sem ouvir o áudio) e o contraste (CT-24) ainda precisa ser medido.
 
 ### ✅ 4. Tela de login e preferências salvas
 Usuários que criarem login poderão salvar suas preferências de voz (velocidade, tom, volume e demais ajustes) e recuperá-las em outro navegador.
