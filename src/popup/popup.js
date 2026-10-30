@@ -198,6 +198,7 @@
 
     function renderAccount(session) {
         currentSession = session;
+        ui.accountCard.hidden = !auth.isConfigured();
         const loggedIn = Boolean(session);
         ui.accountCard.dataset.logado = String(loggedIn);
         ui.accountLoggedOut.hidden = loggedIn;
@@ -285,6 +286,8 @@
 
     /** Ao abrir o popup, a conta é a fonte dos campos sincronizados. */
     async function restoreSession() {
+        if (!auth.isConfigured()) return;
+
         const session = await auth.readSession();
         renderAccount(session);
         if (!session) return;

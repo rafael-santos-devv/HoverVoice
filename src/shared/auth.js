@@ -15,6 +15,9 @@ globalThis.HoverVoiceAuth = (() => {
     const API_BASE_URL = 'http://localhost:3000';
     const GOOGLE_CLIENT_ID = '';
 
+    // Sem Client ID o login fica desativado e a interface o esconde (a extensão funciona só com preferências locais).
+    const isConfigured = () => Boolean(GOOGLE_CLIENT_ID);
+
     const SESSION_KEY = 'authSession';
     const SYNCED_FIELDS = ['voiceRate', 'voicePitch', 'voiceVolume'];
 
@@ -108,5 +111,5 @@ globalThis.HoverVoiceAuth = (() => {
         await request('/preferences', { method: 'PUT', token: session.token, body: pickSynced(state) });
     }
 
-    return { SESSION_KEY, readSession, signInWithGoogle, signOut, pullPreferences, pushPreferences };
+    return { SESSION_KEY, isConfigured, readSession, signInWithGoogle, signOut, pullPreferences, pushPreferences };
 })();
