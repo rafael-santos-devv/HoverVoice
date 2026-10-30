@@ -1,8 +1,8 @@
 {
   "project": {
     "name": "HoverVoice",
-    "version": "1.0.0",
-    "description": "Extensão de acessibilidade para deficiência visual com narração ao passar o mouse",
+    "version": "1.2.0",
+    "description": "Extensão de acessibilidade para deficiência visual: narra páginas web e PDFs ao passar o mouse ou navegar com Tab",
     "author": "Projeto Senai",
     "license": "Educacional"
   },
@@ -10,17 +10,55 @@
     "text-to-speech": {
       "enabled": true,
       "engine": "Web Speech API",
-      "language": "pt-BR",
-      "supported-languages": ["pt-BR", "en-US", "es-ES"]
+      "interface-languages": [
+        "pt",
+        "en",
+        "es"
+      ],
+      "voice-language": {
+        "default": "auto",
+        "options": [
+          "auto",
+          "pt",
+          "en",
+          "es"
+        ],
+        "auto": "idioma (lang) da página ou do PDF; sem ele, o da interface"
+      },
+      "voice-tags": {
+        "pt": "pt-BR",
+        "en": "en-US",
+        "es": "es-ES"
+      },
+      "voice-choice": "vozes instaladas no navegador e no sistema, uma por idioma"
     },
     "hover-narration": {
       "enabled": true,
       "pause-on-new-hover": false,
       "supported-elements": [
-        "p", "span", "a", "button",
-        "h1", "h2", "h3", "h4", "h5", "h6",
-        "li", "td", "th", "label",
-        "img", "svg"
+        "p",
+        "span",
+        "a",
+        "button",
+        "h1",
+        "h2",
+        "h3",
+        "h4",
+        "h5",
+        "h6",
+        "li",
+        "td",
+        "th",
+        "label",
+        "input",
+        "select",
+        "textarea",
+        "img",
+        "svg",
+        "[role=button]",
+        "[role=link]",
+        "[role=heading]",
+        ".bloco-pdf"
       ]
     },
     "keyboard-shortcuts": {
@@ -35,6 +73,10 @@
       "navigate-previous": {
         "key": "Shift+Tab",
         "description": "Navegar para elemento anterior"
+      },
+      "open-pdf-viewer": {
+        "key": "Alt+P",
+        "description": "Abrir o PDF da aba atual no leitor HoverVoice"
       }
     },
     "voice-settings": {
@@ -59,16 +101,45 @@
         "step": 0.1,
         "unit": "0-1 (0-100%)"
       }
+    },
+    "pdf-reader": {
+      "enabled": true,
+      "engine": "PDF.js (lib/)",
+      "auto-open-default": true,
+      "limitations": [
+        "PDFs escaneados não têm texto narrável",
+        "texto girado não é narrado"
+      ]
+    },
+    "account": {
+      "enabled": true,
+      "optional": true,
+      "provider": "Google (chrome.identity)",
+      "synced-preferences": [
+        "voiceRate",
+        "voicePitch",
+        "voiceVolume"
+      ],
+      "backend": "Node.js + SQLite, repositório separado (HoverVoice-backend)",
+      "contract": "docs/api-contrato.md"
     }
   },
   "file-structure": {
-    "manifest.json": "Configuração e permissões da extensão",
-    "popup.html": "Interface do usuário (popup)",
-    "popup.css": "Estilos da interface",
-    "popup.js": "Lógica da interface e controle",
-    "content.js": "Script que roda nas páginas web",
-    "images/icon128.svg": "Ícone da extensão",
+    "manifest.json": "Configuração, permissões e atalhos (Manifest V3)",
+    "src/shared/state.js": "Estado padrão e acesso ao storage (global HoverVoice)",
+    "src/shared/i18n.js": "Textos em pt, en e es (global HoverVoiceI18n)",
+    "src/shared/voice.js": "Idioma e escolha de voz (global HoverVoiceVoice)",
+    "src/shared/auth.js": "Login com Google e sincronização (global HoverVoiceAuth)",
+    "src/background/background.js": "Service worker: atalhos e redirecionamento de PDFs",
+    "src/content/content.js": "Script das páginas: captura, narração e realce",
+    "src/popup/": "Interface da extensão (popup.html, popup.css, popup.js)",
+    "src/viewer/": "Leitor de PDF (viewer.*) e agrupamento de parágrafos (pdf-blocks.js)",
+    "lib/": "PDF.js de terceiros",
+    "images/": "Ícones da extensão (icon16.png, icon48.png, icon128.png)",
+    "exemplos/": "PDFs para teste manual",
+    "docs/": "Documentos do projeto e contrato da API",
     "README.md": "Documentação geral",
+    "CHECKLIST.md": "Roteiro de verificação manual",
     "INSTALACAO.html": "Guia de instalação e uso",
     "TESTE.html": "Página de teste interativa",
     "config.json": "Este arquivo"
@@ -86,45 +157,45 @@
     },
     {
       "name": "Firefox",
-      "minimum-version": 88,
-      "status": "Não testado"
+      "status": "Não suportado"
     },
     {
       "name": "Safari",
-      "minimum-version": 14,
-      "status": "Não testado"
+      "status": "Não suportado"
     }
   ],
   "installation-steps": [
     "1. Abra chrome://extensions/ ou edge://extensions/",
     "2. Ative o 'Modo de desenvolvedor'",
-    "3. Clique em 'Carregar extensão sem empacotamento'",
-    "4. Selecione a pasta HoverVoice",
-    "5. Pronto! A extensão está instalada"
+    "3. Clique em 'Carregar sem compactação'",
+    "4. Selecione a pasta do projeto (a que contém o manifest.json)",
+    "5. Fixe o ícone do HoverVoice na barra de ferramentas"
   ],
   "quick-start": [
     "1. Clique no ícone da extensão",
-    "2. Ative o toggle 'HoverVoice'",
-    "3. Passe o mouse sobre elementos para ouvir",
-    "4. Use Alt+A para ativar/desativar rapidamente"
+    "2. Ative o seletor 'HoverVoice' (ou pressione Alt+A)",
+    "3. Passe o mouse sobre elementos ou navegue com Tab",
+    "4. Ajuste idioma, voz, velocidade, tom e volume no popup"
   ],
   "troubleshooting": {
-    "extension-not-working": "Verifique se está ativada em chrome://extensions/",
-    "no-audio": "Verifique o volume do navegador e do sistema",
-    "elements-not-narrated": "Recarregue a página e certifique-se que a extensão está ativada",
+    "extension-not-working": "Verifique se está ativada em chrome://extensions/ e se os ícones PNG existem em images/",
+    "no-audio": "Verifique o volume do navegador, do sistema e do popup; confirme que há voz instalada para o idioma",
+    "elements-not-narrated": "Recarregue a página e confirme que a extensão está ativa",
+    "wrong-voice-language": "Fixe PT, EN ou ES em 'Idioma da voz' ou corrija o lang da página",
     "voice-too-fast-slow": "Ajuste a velocidade nas configurações de voz"
   },
   "permissions": {
-    "storage": "Salvar configurações do usuário",
-    "scripting": "Executar scripts nas páginas",
-    "activeTab": "Acessar aba ativa"
+    "storage": "Guardar preferências e sessão",
+    "activeTab": "Atalho Alt+P sobre a aba atual",
+    "webRequest": "Detectar respostas PDF para abrir no leitor",
+    "identity": "Login opcional com Google",
+    "<all_urls>": "Narrar qualquer página e ler PDFs de qualquer endereço"
   },
   "future-enhancements": [
-    "Suporte a mais idiomas",
-    "Seleção de vozes diferentes",
+    "Tradução do conteúdo das páginas",
+    "Detecção do idioma de PDFs sem metadado",
+    "OCR para PDFs escaneados",
     "Histórico de elementos narrados",
-    "Modo de acessibilidade avançado",
-    "Temas customizáveis",
     "Integração com leitores de tela"
   ],
   "development": {
@@ -133,11 +204,12 @@
     "apis-used": [
       "Web Speech API",
       "Chrome Storage API",
-      "Chrome Runtime API",
-      "DOM API",
-      "Mutation Observer API"
+      "Chrome Commands API",
+      "Chrome Identity API",
+      "Chrome WebRequest API",
+      "PDF.js"
     ],
-    "testing": "Página TESTE.html fornecida"
+    "testing": "TESTE.html, PDFs de exemplos/ e CHECKLIST.md"
   },
   "accessibility": {
     "wcag-compliance": "Parcial (objetivo WCAG 2.1 AA)",
