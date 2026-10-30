@@ -15,7 +15,7 @@
 (() => {
     'use strict';
 
-    const { DEFAULT_STATE, RATE_RANGE, PITCH_RANGE, VOLUME_RANGE, clamp, readState, stateFromChange } = HoverVoice;
+    const { DEFAULT_STATE, readState, stateFromChange } = HoverVoice;
 
     // =====================================================================
     // Constantes
@@ -75,7 +75,7 @@
     function textFromImage(element) {
         return element.getAttribute('alt')
             || element.getAttribute('title')
-            || 'Imagem sem descrição';
+            || HoverVoiceI18n.t('content.imageNoAlt');
     }
 
     /** Texto de um elemento SVG, a partir de seu <title>. */
@@ -97,7 +97,7 @@
         return element.getAttribute('placeholder')
             || element.getAttribute('title')
             || element.value
-            || `Campo do tipo ${element.type || element.tagName.toLowerCase()}`;
+            || HoverVoiceI18n.t('content.fieldType', { type: element.type || element.tagName.toLowerCase() });
     }
 
     /** Texto referenciado por aria-labelledby. */
@@ -192,11 +192,7 @@
         stopSpeaking();
 
         try {
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = state.language;
-            utterance.rate = clamp(state.voiceRate, RATE_RANGE);
-            utterance.pitch = clamp(state.voicePitch, PITCH_RANGE);
-            utterance.volume = clamp(state.voiceVolume, VOLUME_RANGE);
+            const utterance = HoverVoiceVoice.createUtterance(text, state, element);
 
             utterance.onstart = () => setHighlight(element);
             utterance.onend = clearHighlight;
@@ -334,6 +330,7 @@
 
         const previousEnabled = state.enabled;
         state = newState;
+        HoverVoiceI18n.setFromState(state);
 
         if (state.enabled === previousEnabled) return;
 
@@ -341,7 +338,7 @@
         lastNarratedElement = null;
 
         if (state.enabled) {
-            speak('HoverVoice ativado');
+            speak(HoverVoiceI18n.t('content.enabled'));
         } else {
             stopSpeaking();
         }
@@ -353,6 +350,7 @@
 
     async function init() {
         state = await readState();
+        HoverVoiceI18n.setFromState(state);
 
         injectStyles();
 
