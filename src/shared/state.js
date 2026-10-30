@@ -20,7 +20,9 @@ globalThis.HoverVoice = (() => {
         voiceRate: 1,
         voicePitch: 1,
         voiceVolume: 1,
-        language: 'pt-BR',
+        uiLanguage: null,
+        voiceLanguage: 'auto',
+        voices: {},
         pdfAutoOpen: true
     });
 
