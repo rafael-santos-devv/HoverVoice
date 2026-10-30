@@ -2,7 +2,7 @@
 
 > **Estado:** o login está implementado e testado com o Google simulado, mas **desativado por padrão**: com `GOOGLE_CLIENT_ID` vazio em `src/shared/auth.js`, o popup esconde o cartão de conta. Basta preencher o Client ID (passos em "Configuração") para ativá-lo.
 
-Backend em Node.js + SQLite, em repositório separado (`HoverVoice-backend`). Todas as rotas falam JSON. Fora de `localhost`, só HTTPS.
+Backend em Node.js + SQLite, em repositório separado: https://github.com/MadureiraHenrique/HoverVoice-backend (privado). Todas as rotas falam JSON. Fora de `localhost`, só HTTPS.
 
 ## Autenticação
 

@@ -78,6 +78,6 @@ Se não for possível rodar o navegador, diga claramente o que foi e o que não 
 ## Figma e login (decisões já tomadas)
 
 - O Figma está conectado por MCP. Arquivo: `https://www.figma.com/design/VkEoAoAWapcuyIX7WpGqhy?node-id=13-2` (fileKey `VkEoAoAWapcuyIX7WpGqhy`, nó `13:2`). O design vem antes do código: crie a tela no Figma, mostre ao dono e **só comece o código depois da aprovação**.
-- O login é **opcional**, só com Google, e usa um **backend próprio** em Node.js + SQLite, em repositório separado (`../HoverVoice-backend`; contrato em `docs/api-contrato.md`). A extensão nunca guarda senha, nem mantém chaves ou segredos no código; guarde apenas o token de sessão em `chrome.storage.local`. Toda comunicação com o backend deve usar HTTPS.
+- O login é **opcional**, só com Google, e usa um **backend próprio** em Node.js + SQLite, em repositório separado (`../HoverVoice-backend`, https://github.com/MadureiraHenrique/HoverVoice-backend; contrato em `docs/api-contrato.md`). A extensão nunca guarda senha, nem mantém chaves ou segredos no código; guarde apenas o token de sessão em `chrome.storage.local`. Toda comunicação com o backend deve usar HTTPS.
 - O login está **desativado por padrão**: sem `GOOGLE_CLIENT_ID` em `src/shared/auth.js` (criar o cliente OAuth no Google Cloud exige forma de pagamento), o popup esconde o cartão de conta.
 - Sem login, a extensão continua funcionando como hoje, com preferências locais. O login só habilita salvar e sincronizar preferências.

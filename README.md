@@ -87,7 +87,7 @@ Com o login ativado, **Entrar**, na parte de cima do popup, abre o login do Goog
 - Ao entrar, as preferências da conta substituem as locais; em conta nova, as locais são enviadas.
 - Sem internet ou com o servidor fora do ar, a extensão segue com as preferências locais e avisa.
 - A extensão guarda só o token de sessão e o e-mail em `chrome.storage.local`; nunca senha.
-- Exige o backend em `../HoverVoice-backend` (Node.js + SQLite) e um Client ID do Google. Contrato e configuração em [`docs/api-contrato.md`](docs/api-contrato.md).
+- Exige o backend ([HoverVoice-backend](https://github.com/MadureiraHenrique/HoverVoice-backend), privado; Node.js + SQLite) e um Client ID do Google. Contrato e configuração em [`docs/api-contrato.md`](docs/api-contrato.md).
 
 ---
 
