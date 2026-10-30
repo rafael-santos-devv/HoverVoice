@@ -1,182 +1,87 @@
-# Checklist de Verificação - HoverVoice
+# Checklist de Verificação — HoverVoice v1.2.0
 
-Use este checklist para garantir que tudo está funcionando corretamente.
+Roteiro manual para conferir a extensão antes de uma entrega. Marque cada item ao testar. Ao terminar, preencha o resumo no fim.
 
-## ✅ Verificação de Arquivos
+## 1. Instalação
 
-- [ ] `manifest.json` - Presente e bem formatado
-- [ ] `popup.html` - Presente com interface completa
-- [ ] `popup.css` - Presente com estilos
-- [ ] `popup.js` - Presente com lógica do popup
-- [ ] `content.js` - Presente com script de conteúdo
-- [ ] `images/icon128.svg` - Presente (ícone da extensão)
-- [ ] `README.md` - Documentação principal
-- [ ] `INSTALACAO.html` - Guia de instalação
-- [ ] `TESTE.html` - Página de teste
-- [ ] `config.json` - Configurações do projeto
-- [ ] `INICIO_RAPIDO.md` - Guia de início rápido
+- [ ] `manifest.json` é JSON válido e os ícones `icon16.png`, `icon48.png` e `icon128.png` existem em `images/`
+- [ ] A extensão carrega em `chrome://extensions/` (modo de desenvolvedor, "Carregar sem compactação") sem erros
+- [ ] O ícone aparece na barra de ferramentas
+- [ ] Ao abrir o popup, o console da página do service worker não mostra erros
 
-## ✅ Instalação da Extensão
+## 2. Ativação e narração (`TESTE.html`)
 
-- [ ] Abri chrome://extensions/
-- [ ] Ativei "Modo de desenvolvedor"
-- [ ] Cliquei em "Carregar extensão sem empacotamento"
-- [ ] Selecionei a pasta HoverVoice
-- [ ] A extensão aparece na lista de extensões
-- [ ] O ícone azul aparece na barra de ferramentas
+- [ ] O popup abre com o visual novo (cabeçalho, selo Ativo/Inativo, cartões)
+- [ ] Ativar pelo seletor muda o selo para "Ativo" e o texto do cartão principal
+- [ ] Passar o mouse num parágrafo narra o texto, com contorno no elemento
+- [ ] Passar rápido por vários elementos não dispara fala
+- [ ] `Tab` e `Shift + Tab` narram cada elemento focado
+- [ ] Narra: título, parágrafo, link, botão, item de lista, célula de tabela, rótulo e campo de formulário, imagem com `alt`, SVG com título
+- [ ] Elemento aninhado (um `span` dentro de um `p`) é narrado uma vez só
+- [ ] Uma nova fala cancela a anterior
+- [ ] `Alt + A` liga e desliga; ao ligar, fala "HoverVoice ativado"; ao desligar, a fala para
 
-## ✅ Funcionalidade Básica
+## 3. Voz e configurações
 
-- [ ] Cliquei no ícone da extensão
-- [ ] O popup abriu com a interface
-- [ ] Consegui ativar o toggle "HoverVoice"
-- [ ] O status mudou para "HoverVoice Ativo"
+- [ ] **Testar voz**: texto vazio mostra aviso; com texto, **Ouvir** fala
+- [ ] Velocidade, tom e volume mudam a fala seguinte; volume 0% fica mudo
+- [ ] A seção de configurações abre e fecha com animação (e sem animação com `prefers-reduced-motion`)
+- [ ] Fechar e reabrir o popup mantém os valores
+- [ ] Mudar no popup vale numa aba já aberta, sem recarregar
 
-## ✅ Narração ao Passar o Mouse
+## 4. Idiomas e vozes
 
-- [ ] Abri a página TESTE.html
-- [ ] Passei o mouse sobre um parágrafo
-- [ ] O áudio foi narrado
-- [ ] A narração estava clara
+- [ ] Idioma da interface PT, EN e ES troca todos os textos do popup na hora e fica salvo
+- [ ] Sem escolha salva, o popup segue o idioma do navegador (português se for outro)
+- [ ] Idioma da voz **Automático**: página com `lang="en"` é lida com voz inglesa; sem `lang`, com a voz do idioma da interface
+- [ ] Idioma da voz fixo (PT, EN ou ES) ignora o `lang` da página
+- [ ] A lista **Voz** mostra as vozes instaladas do idioma; escolher uma muda a fala; "Padrão do sistema" volta ao normal
+- [ ] Idioma sem voz instalada mostra o aviso, sem quebrar
+- [ ] O `lang` de páginas de terceiros não é alterado pela extensão
 
-## ✅ Teste de Voz
+## 5. Leitor de PDF
 
-- [ ] Digitei um texto no campo "TESTAR VOZ"
-- [ ] Cliquei no botão "Ouvir"
-- [ ] O áudio foi reproduzido
-- [ ] O tom e velocidade estavam corretos
+- [ ] Com "Abrir PDFs no leitor" ligado, abrir um PDF no navegador vai para o leitor
+- [ ] `Alt + P` abre o PDF da aba atual (ou um leitor vazio)
+- [ ] `exemplos/relatorio-exemplo.pdf`: parágrafos narrados ao passar o mouse e por `Tab`
+- [ ] `exemplos/duas-colunas-exemplo.pdf`: respeita as colunas
+- [ ] Botões **Abrir arquivo**, **Baixar cópia**, tamanho (− / +) e narração funcionam
+- [ ] Arrastar um PDF para a janela abre o arquivo
+- [ ] PDF com senha pede a senha; PDF escaneado avisa que não há texto
+- [ ] `Esc` interrompe a fala
+- [ ] A interface do leitor também troca de idioma
 
-## ✅ Configurações de Voz
+## 6. Conta com Google (opcional)
 
-- [ ] Abri o popup
-- [ ] Cliquei em "Configurações de Voz"
-- [ ] Ajustei a velocidade
-- [ ] Ajustei o tom
-- [ ] Ajustei o volume
-- [ ] Testei as mudanças
+Só com o backend no ar e o Client ID configurado (`docs/api-contrato.md`).
 
-## ✅ Atalhos de Teclado
+- [ ] Sem conta, tudo funciona como antes, e **Agora não** volta ao popup
+- [ ] **Entrar** abre o login do Google; depois mostra o e-mail e "Preferências sincronizadas"
+- [ ] Mudar a velocidade e soltar o controle grava na conta; em outro navegador, entrar traz o mesmo valor
+- [ ] **Sair** apaga a sessão e mantém as preferências locais
+- [ ] Servidor fora do ar: aparece o aviso de sem conexão e a extensão segue com as preferências locais
+- [ ] Sessão expirada: aparece o aviso e o botão volta a "Entrar"
 
-- [ ] Pressione Alt+A - Extensão ativou/desativou
-- [ ] Pressione Alt+A novamente - Extensão togglou
-- [ ] Abri TESTE.html
-- [ ] Pressione Tab - Navegou para próximo elemento
-- [ ] Pressione Shift+Tab - Navegou para elemento anterior
+## 7. Acessibilidade da interface
 
-## ✅ Elementos Suportados
+- [ ] Todo o popup e o leitor funcionam só com o teclado, com foco visível em cada controle
+- [ ] Mensagens de estado são anunciadas (`role="status"`)
+- [ ] Textos e controles têm contraste mínimo de 4,5:1 (medir com uma ferramenta de contraste)
+- [ ] Nenhum `alert()` é usado
 
-- [ ] Passe o mouse sobre parágrafos
-- [ ] Passe o mouse sobre títulos
-- [ ] Passe o mouse sobre botões
-- [ ] Passe o mouse sobre links
-- [ ] Passe o mouse sobre itens de lista
-- [ ] Passe o mouse sobre campos de formulário
-- [ ] Passe o mouse sobre células de tabela
-- [ ] Passe o mouse sobre imagens (alt text)
+## 8. Compatibilidade
 
-## ✅ Interface do Popup
+- [ ] Testado no Google Chrome
+- [ ] Testado no Microsoft Edge
 
-- [ ] Header com logo e título
-- [ ] Toggle de ativação/desativação
-- [ ] Status text atualizando
-- [ ] Seção de teste de voz
-- [ ] Botão "Ouvir" funcionando
-- [ ] Seção de configurações
-- [ ] Atalhos exibindo corretamente
-- [ ] Seção "O QUE É NARRADO" com ícones
+## Resumo
 
-## ✅ Armazenamento e Persistência
-
-- [ ] Ativei a extensão
-- [ ] Atualizei configurações
-- [ ] Fechei o popup
-- [ ] Reabri o popup
-- [ ] As configurações foram mantidas
-
-## ✅ Compatibilidade de Navegadores
-
-- [ ] Testei no Google Chrome
-- [ ] Testei no Microsoft Edge (se disponível)
-
-## ✅ Tratamento de Erros
-
-- [ ] Desativei JavaScript no navegador - Esperado não funcionar
-- [ ] Reativei JavaScript
-- [ ] Tudo funcionou novamente
-- [ ] Desativei a extensão
-- [ ] Reativei a extensão
-- [ ] Tudo funcionou novamente
-
-## ✅ Documentação
-
-- [ ] Li INICIO_RAPIDO.md
-- [ ] Li INSTALACAO.html
-- [ ] Testei com TESTE.html
-- [ ] Consultei README.md para mais informações
-
-## ✅ Casos de Uso
-
-Testei em diferentes cenários:
-
-- [ ] Narração rápida (textos curtos)
-- [ ] Narração longa (parágrafos longos)
-- [ ] Navegação por múltiplos elementos
-- [ ] Mudança rápida entre elementos
-- [ ] Uso de atalhos de teclado
-- [ ] Formulários complexos
-- [ ] Tabelas com muitos dados
-
-## 🎯 Problemas Encontrados
-
-Se encontrou problemas, liste-os aqui:
+Problemas encontrados:
 
 ```
-1. [Descrição do problema]
-   Solução: [Ação tomada]
-
-2. [Descrição do problema]
-   Solução: [Ação tomada]
+1. [descrição] — solução:
 ```
 
-## 📊 Pontuação Final
+Itens confirmados: ___ de ___  ·  Status: [ ] Pronto  [ ] Com ressalvas  [ ] Com problemas
 
-Total de itens: **60+**
-Itens confirmados: ___
-Percentual de sucesso: ____%
-
-- [ ] ✅ 95-100% = Pronto para usar
-- [ ] ⚠️ 80-94% = Funcional com limitações menores
-- [ ] ❌ < 80% = Requer correções
-
-## 🎉 Status Final
-
-Selecione um:
-
-- [ ] ✅ **PRONTO** - Extensão funcionando perfeitamente
-- [ ] ⚠️ **COM RESSALVAS** - Funcionando mas com pequenos problemas
-- [ ] ❌ **PROBLEMAS** - Necessita correções
-
----
-
-## 📝 Notas Adicionais
-
-(Use este espaço para adicionar notas ou observações)
-
-```
-_________________________________________________________________
-
-_________________________________________________________________
-
-_________________________________________________________________
-```
-
----
-
-**Data da verificação:** ___/___/______  
-**Responsável:** _____________________  
-**Navegador utilizado:** _____________________  
-**Versão do SO:** _____________________
-
----
-
-**HoverVoice v1.0.0 - Checklist de Verificação Completo**
+**Data:** ___/___/______  ·  **Responsável:** _____________________  ·  **Navegador e versão:** _____________________
