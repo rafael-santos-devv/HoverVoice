@@ -79,7 +79,9 @@ Para treinar, abra o `TESTE.html` (página com todos os tipos de elemento) e, pa
 
 ## Conta com Google (opcional)
 
-Na parte de cima do popup, **Entrar** abre o login do Google. Na primeira vez a conta é criada automaticamente.
+> **Estado atual: desativada.** Enquanto `GOOGLE_CLIENT_ID` estiver vazio em `src/shared/auth.js`, o cartão de conta nem aparece no popup e a extensão funciona só com preferências locais. O código, o backend e os testes estão prontos; falta criar o cliente OAuth no Google Cloud (que exige uma forma de pagamento cadastrada) e preencher o Client ID.
+
+Com o login ativado, **Entrar**, na parte de cima do popup, abre o login do Google. Na primeira vez a conta é criada automaticamente.
 
 - Sincroniza velocidade, tom e volume. Idioma, voz escolhida e abertura de PDFs ficam só neste navegador.
 - Ao entrar, as preferências da conta substituem as locais; em conta nova, as locais são enviadas.
@@ -241,7 +243,7 @@ O texto é normalizado (espaços colapsados) e limitado a 500 caracteres.
 
 **Elementos não são narrados** — Confirme que a extensão está ativa e que o elemento tem texto, rótulo ou descrição.
 
-**O login não funciona** — Precisa do backend no ar e do Client ID configurado em `src/shared/auth.js` (veja `docs/api-contrato.md`). Sem eles, a extensão funciona normalmente, só sem sincronização.
+**Não aparece a opção de entrar** — É o esperado enquanto o Client ID não estiver configurado em `src/shared/auth.js` (veja `docs/api-contrato.md`). Com o Client ID, o login ainda precisa do backend no ar. Sem conta, a extensão funciona normalmente, só sem sincronização.
 
 ---
 

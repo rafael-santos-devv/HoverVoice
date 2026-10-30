@@ -13,15 +13,7 @@ Valem para **cada** tarefa deste quadro. Antes de começar e ao terminar, confir
 
 ## Em andamento
 
-### 4. Tela de login e preferências salvas
-Usuários que criarem login poderão salvar suas preferências de voz (velocidade, tom, volume e demais ajustes) e recuperá-las em outro navegador.
-- [x] **Decisões do dono:** login e registro são **opcionais** e **minimalistas**; autenticação **só com Google** (entrar e criar conta são o mesmo fluxo); as preferências sincronizadas são velocidade, tom e volume (não existe "intensidade"). Sem e-mail/senha, logo sem "recuperar senha".
-- [x] Backend: Node.js + SQLite, sem dependências, em `../HoverVoice-backend` (repositório git local, 5 testes passando). **Pendente do dono:** criar o cliente OAuth no Google Cloud (passos em `docs/api-contrato.md`), preencher `GOOGLE_CLIENT_ID`/`API_BASE_URL` em `src/shared/auth.js` e escolher a hospedagem com HTTPS.
-- [x] Desenhar a tela de login no Figma (seção "Login com Google · proposta", nó `51:12`): convite, entrada, carregando, erro e logado. **Aguardando aprovação do design.**
-- [x] Contrato da API do backend (rotas de cadastro, login e leitura/gravação de preferências) documentado antes de implementar.
-- [x] Implementar a tela no popup, guardando só o token em `chrome.storage.local` e usando HTTPS. Atualizar `host_permissions` somente para o domínio do backend, se possível.
-- [x] Sincronizar as preferências com o backend sem quebrar o uso offline/sem login.
-- [ ] Testar com o Google de verdade (login, logout, token expirado). Já testados com o Google simulado: login, logout, sincronização, sem Client ID e backend fora do ar.
+_(nenhuma)_
 
 ## A fazer
 
@@ -70,3 +62,14 @@ Reflete o código já refatorado, com login e idiomas.
 - [x] `CHECKLIST.md`: refeito como roteiro de verificação da v1.2.0 (inclui PDF, idiomas, vozes e conta).
 - [x] `INSTALACAO.html` e `TESTE.html`: versão 1.2.0, `Alt+P`, idiomas, PDF e conta; `TESTE.html` ganhou parágrafos `lang="en"`, `lang="es"` e `lang="pt-BR"` para testar a voz automática; botões mortos de "Reportar problema" viraram links para as issues do GitHub.
 - [x] Documentação do Software e Documento de Qualidade reescritos para a v1.2.0 em `docs/atualizados/` (`.docx` editável e `.pdf` de cada um). Os PDFs originais de `docs/` ficam como estavam. Pontos para a equipe conferir: IDs RF/RN/RNF novos (RF-11 a RF-17, RN-05 a RN-07, RNF-06 e RNF-07) continuam provisórios até o DOC-04; o ciclo 1 de testes foi por script (sem ouvir o áudio) e o contraste (CT-24) ainda precisa ser medido.
+
+### ✅ 4. Tela de login e preferências salvas
+Usuários que criarem login poderão salvar suas preferências de voz (velocidade, tom, volume e demais ajustes) e recuperá-las em outro navegador.
+- [x] **Decisões do dono:** login e registro são **opcionais** e **minimalistas**; autenticação **só com Google** (entrar e criar conta são o mesmo fluxo); as preferências sincronizadas são velocidade, tom e volume (não existe "intensidade"). Sem e-mail/senha, logo sem "recuperar senha".
+- [x] Backend: Node.js + SQLite, sem dependências, em `../HoverVoice-backend` (repositório git local, 5 testes passando). **Pendente do dono:** criar o cliente OAuth no Google Cloud (passos em `docs/api-contrato.md`), preencher `GOOGLE_CLIENT_ID`/`API_BASE_URL` em `src/shared/auth.js` e escolher a hospedagem com HTTPS.
+- [x] Desenhar a tela de login no Figma (seção "Login com Google · proposta", nó `51:12`): convite, entrada, carregando, erro e logado. **Aguardando aprovação do design.**
+- [x] Contrato da API do backend (rotas de cadastro, login e leitura/gravação de preferências) documentado antes de implementar.
+- [x] Implementar a tela no popup, guardando só o token em `chrome.storage.local` e usando HTTPS. Atualizar `host_permissions` somente para o domínio do backend, se possível.
+- [x] Sincronizar as preferências com o backend sem quebrar o uso offline/sem login.
+- [x] Login **entregue desativado**: sem `GOOGLE_CLIENT_ID` em `src/shared/auth.js`, o cartão de conta fica oculto e a extensão usa só preferências locais (testado). Já testados com o Google simulado: login, logout, sincronização, backend fora do ar.
+- [ ] **Ativação futura (fora do escopo desta entrega):** criar o cliente OAuth no Google Cloud (a conta exige forma de pagamento; pode ser feita por quem da equipe já tenha conta no Google Cloud), preencher o Client ID e testar com o Google real. Passos em `docs/api-contrato.md`.

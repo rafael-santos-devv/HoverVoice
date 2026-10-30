@@ -55,6 +55,7 @@ Roteiro manual para conferir a extensão antes de uma entrega. Marque cada item 
 
 Só com o backend no ar e o Client ID configurado (`docs/api-contrato.md`).
 
+- [ ] Com `GOOGLE_CLIENT_ID` vazio (estado atual), o cartão de conta **não aparece** e todo o resto funciona
 - [ ] Sem conta, tudo funciona como antes, e **Agora não** volta ao popup
 - [ ] **Entrar** abre o login do Google; depois mostra o e-mail e "Preferências sincronizadas"
 - [ ] Mudar a velocidade e soltar o controle grava na conta; em outro navegador, entrar traz o mesmo valor
