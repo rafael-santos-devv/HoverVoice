@@ -6,6 +6,8 @@
     --cor-superficie: #0f2740;
     --cor-superficie-alta: #143453;
     --cor-borda: #24557d;
+    /* Bordas de controles (campos, botões, segmentos) precisam de 3:1 contra o fundo (WCAG 1.4.11); a borda dos cartões é só decorativa. */
+    --cor-borda-controle: #4a82ad;
     --cor-primaria: #00a8e8;
     --cor-primaria-clara: #5ad6ff;
     --cor-texto: #f3f9fd;
@@ -205,7 +207,7 @@ body[data-estado="ativo"] .cartao-principal {
     position: absolute;
     inset: 0;
     border-radius: 99px;
-    background: #3a4f60;
+    background: #6f93aa;
     transition: background var(--duracao) var(--curva);
     pointer-events: none;
 }
@@ -238,7 +240,7 @@ textarea {
     resize: vertical;
     min-height: 64px;
     padding: 12px 14px;
-    border: 1px solid var(--cor-borda);
+    border: 1px solid var(--cor-borda-controle);
     border-radius: var(--raio-campo);
     background: var(--cor-fundo);
     color: var(--cor-texto);
@@ -426,7 +428,7 @@ body[data-tela="login"] .conteudo { display: none; }
 
 .botao-secundario {
     padding-block: 12px;
-    border: 1px solid var(--cor-borda);
+    border: 1px solid var(--cor-borda-controle);
     background: transparent;
     color: var(--cor-texto-suave);
     font-size: 14px;
@@ -484,7 +486,7 @@ body[data-tela="login"] .conteudo { display: none; }
     display: flex;
     gap: 4px;
     padding: 4px;
-    border: 1px solid var(--cor-borda);
+    border: 1px solid var(--cor-borda-controle);
     border-radius: 99px;
     background: var(--cor-fundo);
 }
@@ -520,7 +522,7 @@ body[data-tela="login"] .conteudo { display: none; }
 select {
     width: 100%;
     padding: 12px 14px;
-    border: 1px solid var(--cor-borda);
+    border: 1px solid var(--cor-borda-controle);
     border-radius: var(--raio-campo);
     background: var(--cor-fundo);
     color: var(--cor-texto);

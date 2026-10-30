@@ -21,6 +21,7 @@
     --cor-superficie: #0f2740;
     --cor-superficie-alta: #143453;
     --cor-borda: #24557d;
+    --cor-borda-controle: #4a82ad;
     --cor-primaria: #00a8e8;
     --cor-primaria-clara: #5ad6ff;
     --cor-texto: #f3f9fd;
@@ -161,7 +162,7 @@ input:focus-visible,
     gap: 8px;
     min-height: 40px;
     padding: 8px 14px;
-    border: 1px solid var(--cor-borda);
+    border: 1px solid var(--cor-borda-controle);
     border-radius: var(--raio-borda-pequeno);
     background: var(--cor-superficie);
     color: var(--cor-texto);
@@ -298,7 +299,7 @@ input:focus-visible,
 .formulario-senha input {
     max-width: 320px;
     padding: 10px 12px;
-    border: 1px solid var(--cor-borda);
+    border: 1px solid var(--cor-borda-controle);
     border-radius: var(--raio-borda-pequeno);
     background: var(--cor-fundo);
     color: var(--cor-texto);
